@@ -1,5 +1,93 @@
 # CONCURRENT
 
+
+
+文件导入导出
+
+```java
+@Test
+    public void importPipelineBatchingExcel(InputStream inputStream) {
+
+        ImportExcel importExcel = new ImportExcel();
+        LinkedList<PipelineBatchingExcelVO> read = ExcelUtil.read(inputStream, PipelineBatchingExcelVO.class);
+        ConcurrentHashMap<String, PipelineEntity> concurrentHashMap = new ConcurrentHashMap<>();
+        List<PipelineBatchingEntity> result = new ArrayList<>();
+        if (read.size() <= 100) {
+            List<PipelineBatchingEntity> list = new CopyOnWriteArrayList<>();
+
+            for (PipelineBatchingExcelVO pipelineBatchingVO : read) {
+                PipelineBatchingEntity entity = importExcel.getByPipelineBatchingVO(pipelineBatchingVO, concurrentHashMap);
+                list.add(entity);
+            }
+            pipelineBatchingService.insertBatch(list);
+        } else {
+            List<List<PipelineBatchingExcelVO>> partition = ListUtils.partition(read, 100);
+            CompletableFuture[] completableFutures = partition.stream().map(item -> CompletableFuture.supplyAsync(() -> {
+                List<PipelineBatchingEntity> list = new ArrayList<>();
+                for (PipelineBatchingExcelVO pipelineBatchingVO : item) {
+                    PipelineBatchingEntity entity = importExcel.getByPipelineBatchingVO(pipelineBatchingVO, concurrentHashMap);
+                    list.add(entity);
+                }
+                return list;
+            }, threadPoolExecutor).whenComplete((r, c) -> result.addAll(r))).toArray(CompletableFuture[]::new);
+            CompletableFuture.allOf(completableFutures).join();
+
+            List<List<PipelineBatchingEntity>> partition1 = Lists.partition(result, 10000);
+            for (List<PipelineBatchingEntity> pipelineBatchingEntities : partition1) {
+                pipelineBatchingService.insertBatch(pipelineBatchingEntities);
+            }
+        }
+    }
+}
+```
+
+```java
+public void exportTest(HttpServletResponse response) {
+    List<PipelineBatchingEntity> pipelineBatchingEntities = pipelineBatchingMapper.selectList(null);
+    int selectCount = pipelineBatchingEntities.size();
+    int pageSize = 1000;
+    double pages = Math.ceil((double) selectCount / pageSize);
+    HashMap<String, PipelineEntity> map = new HashMap<>();
+    List<CompletableFuture<List<PipelineBatchingExportVO>>> futures = new ArrayList<>();
+    List<PipelineBatchingExportVO> result = new ArrayList<>();
+    for (int i = 1; i <= pages; i++) {
+        int finalI = i;
+        CompletableFuture<List<PipelineBatchingExportVO>> submit = CompletableFuture.supplyAsync(() -> {
+            //查出来的分页数据
+            List<PipelineBatchingEntity> entities = pipelineBatchingEntities.stream().skip((long) (finalI - 1) * pageSize).limit(pageSize).collect(Collectors.toList());
+            List<PipelineBatchingExportVO> res = new ArrayList<>();
+            for (PipelineBatchingEntity item : entities) {
+                PipelineEntity pipelineEntity;
+                pipelineEntity = map.get(item.getPipelineId());
+                if (pipelineEntity == null) {
+                    pipelineEntity = pipelineService.selectById(item.getPipelineId());
+                    map.put(item.getPipelineId(), pipelineEntity);
+                }
+                PipelineBatchingExportVO vo = new PipelineBatchingExportVO();
+                BeanUtil.copyProperties(item, vo);
+                vo.setMatchingNum(item.getMatchingNum());
+                vo.setComponentName(item.getProdName());
+                BeanUtil.copyProperties(pipelineEntity, vo);
+                vo.setPipelineNo(pipelineEntity.getPipeCode());
+                vo.setPipelineNo2(pipelineEntity.getPipeCode());
+                vo.setSegmentNumber(item.getPipeBatchingSectionCode());
+                vo.setUnitNo(pipelineEntity.getUnitCode());
+                res.add(vo);
+            }
+            return res;
+        }, threadPoolExecutor).whenComplete((r, c) -> result.addAll(r));
+        futures.add(submit);
+    }
+    CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+    //排序
+    ExcelUtil.export(response, "管道配料信息", result, PipelineBatchingExportVO.class);
+}
+```
+
+
+
+
+
 gitee地址  https://gitee.com/phui/share-concurrent
 
 ```java
