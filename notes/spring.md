@@ -85,3 +85,75 @@ Bean实例化之后，初始化时，有相关的Aware接口供我们去拿到Co
 - `org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#populateBean`（实例化后属性注入）
 - `org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean(java.lang.String, java.lang.Object, org.springframework.beans.factory.support.RootBeanDefinition)`（初始化入口）
 
+
+
+### 2、Spring @[Configuration](https://so.csdn.net/so/search?q=Configuration&spm=1001.2101.3001.7020) 和 @Component 区别
+
+> 一句话概括就是 `@Configuration` 中所有带 `@Bean` 注解的方法都会被动态代理，因此调用该方法返回的都是同一个实例。
+>
+> Spring 注解中 @Configuration 和 @Component 的区别总结为一句话就是：
+>
+>         @Configuration 中所有带 @Bean 注解的方法都会被动态代理（cglib），因此调用该方法返回的都是同一个实例。而 @Conponent 修饰的类不会被代理，每实例化一次就会创建一个新的对象。
+>
+> 在 @Configuration 注解的源代码中，使用了 @Component 注解：
+>
+> 从定义来看， @Configuration 注解本质上还是 @Component，因此 <context:component-scan/> 或者 @ComponentScan 都能处理 @Configuration 注解的类。
+>
+> 下面我们通过一个例子来说明上述情况：
+>
+> // 使用@Configuration和@Bean注解创建Room实例和People实例，并注入进spring容器
+> @Configuration
+> public class RoomPeopleConfig {
+>
+> ```java
+> @Bean
+> public Room room() {
+>     Room room = new Room();
+>     room.setId(1);
+>     room.setName("房间");
+>     room.setPeople(people());// 在创建Room实例时，再调用一次People()创建一个People实例
+>     return room;
+> }
+>  
+> @Bean
+> public People people() {
+>     People people = new People();
+>     people.setId(1);
+>     people.setName("小明");
+>     return people;
+> }
+> }
+> ```
+>
+> 
+> 
+>
+> ```java
+> @SpringBootTest
+> @ContextConfiguration(classes = Application.class)
+> public class ConfigurationTests {
+> @Autowired
+> private Room room;
+>  
+> @Autowired
+> private People people;
+> ```
+>
+>  
+>
+> ```java
+> @Test
+> public void test() {
+>     System.out.println(people == room.getPeople() ? "是同一个实例" : "不是同一个实例");
+> }
+> }
+> ```
+>
+>
+> 输出结果：同一个
+>
+> 如果将 @Configuration 换成 @Component ，则输出：不同
+>
+> 从上面的结果可以发现使用 @Configuration 时在 people 和 spring 容器之中的是同一个对象，而使用 @Component 时是不同的对象。这就是因为 @Configuration 使用了 cglib 动态代理，返回的是同一个实例对象。
+>
+> 虽然 @Component 注解也会当做配置类，但是并不会为其生成 CGLIB 代理 Class，所以在生成 room 对象时和生成 people 对象时调用 people( ) 方法执行了两次 new 操作，所以是不同的对象。当使用 @Configuration 注解时，生成当前对象的子类 Class，并对方法拦截，第二次调用 people（）方法时直接从 BeanFactory 之中获取对象，所以得到的是同一个对象

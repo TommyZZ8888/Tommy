@@ -1,0 +1,13 @@
+wxminiapp:
+    appId: wxb4943068dbd847fd
+    appSecret: c1e8597afea873c4a56a645c30c842e9
+    grantType: client_credential
+    token: asdffgghhjjjj
+    aesKey: waiqCPSRFuqWvandDsySiPg9LLXQeXHmcFLipQOz1Bg
+server:
+    port: 10010
+spring:
+    data:
+        redis:
+            host: 172.16.16.106
+            port: 6379

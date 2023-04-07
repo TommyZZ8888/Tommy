@@ -1,0 +1,1 @@
+bean  生命周期 debug
