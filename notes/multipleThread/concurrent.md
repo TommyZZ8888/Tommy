@@ -1702,7 +1702,7 @@ public class _03_PriorityBlockingQueue_Pancake_Comparable {
 }
 ```
 
-```
+```java
 package org.ph.share._12_BlockingQueue_who_else_2;
 
 import org.ph.share.SmallTool;

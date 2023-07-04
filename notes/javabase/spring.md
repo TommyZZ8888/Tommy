@@ -157,3 +157,22 @@ Bean实例化之后，初始化时，有相关的Aware接口供我们去拿到Co
 > 从上面的结果可以发现使用 @Configuration 时在 people 和 spring 容器之中的是同一个对象，而使用 @Component 时是不同的对象。这就是因为 @Configuration 使用了 cglib 动态代理，返回的是同一个实例对象。
 >
 > 虽然 @Component 注解也会当做配置类，但是并不会为其生成 CGLIB 代理 Class，所以在生成 room 对象时和生成 people 对象时调用 people( ) 方法执行了两次 new 操作，所以是不同的对象。当使用 @Configuration 注解时，生成当前对象的子类 Class，并对方法拦截，第二次调用 people（）方法时直接从 BeanFactory 之中获取对象，所以得到的是同一个对象
+
+### 3、springboot配置文件的加载位置和优先顺序
+
+springboot会按照下面优先级顺序寻找application.properties文件和application.yml文件。高优先级覆盖低优先级的文件内容。
+
+file:./config 文件路径下和src同级别新建一个文件夹
+file:./
+classpath:/config/ 类路径下
+classpath:
+spring.config.location可以用来改变加载文件位置。在项目打包后，可以用命令行参数的形式指定配置文件的新位置。和默认加载的文件形成互补，共同起作用。
+java -jar XXX.jar --server.port=8007
+
+
+
+![image-20230704145759440](..\img\javabase\spring\配置文件加载顺序.png)
+
+外部配置文件加载顺序，由jar包外向jar包内寻找配置文件，高优先级覆盖低优先级。
+红色是file:路径，也就是项目根路径。
+蓝色是classpath路径，也就是和类根目录平级的位置。
