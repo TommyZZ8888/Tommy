@@ -176,3 +176,10 @@ java -jar XXX.jar --server.port=8007
 外部配置文件加载顺序，由jar包外向jar包内寻找配置文件，高优先级覆盖低优先级。
 红色是file:路径，也就是项目根路径。
 蓝色是classpath路径，也就是和类根目录平级的位置。
+
+### 4、springboot自动装配
+
+```java
+主配置类启动，通过@SringBootApplication 中的@EnableAutoConfguration 加载所需的所 有自动配置类，然后自动配置类生效并给容器添加各种组件。那么@EnableAutoConfguration 其实是通过它里面的@AutoConfigurationPackage 注解，将主配置类的所在包皮下面所有子包 里面的所有组件扫描加载到 Spring 容器中; 还通过@EnableAutoConfguration 里面的 AutoConfigurationImportSelector 选择器中的 SringFactoriesLoader.loadFactoryNames()方法，获取类路径下的 META-INF/spring.factories 中的 资源并经过一些列判断之后作为自动配置类生效到容器中，自动配置类生效后帮我们进行自 动配置工作，就会给容器中添加各种组件:这些组件的属性是从对应的 Properties 类中获取 的，这些 Properties 类里面的属性又是通过@ConfigurationProperties 和配置文件绑定的:所以 我们能配置的属性也都是来源于这个功能的 Properties 类。SpringBoot 在自动配置很多组件 的时候，先判断容器中有没有用户自己配置的(@Bean、@Component)如果有就用用户配置 的，如果没有，才自动配置;如果有些组件可以有多个就将用户配置和默认配置的组合起来
+```
+
