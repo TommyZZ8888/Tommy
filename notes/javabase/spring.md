@@ -42,7 +42,7 @@ java是描述类的信息，spring是描述对象的信息。
 
 填充之后开始进行初始化，通过**InvokeAwareMethod**方法来对实现了aware相关接口的bean填充相关的资源。比如我们在项目中会抽取出来一个实现了ApplicationContextAware接口的工具类，来通过获取ApplicationContext对象来获取相关的bean。
 
-之后会通过**BeanPostProcesser**后置处理器，该处理器有两个方法，**before和after**。先执行**BeanPostBeforeProcessor**方法，之后执行**InvokeInitMethod**方法，比如**@PostConstruct**，实现了tializatingBean接口的方法。最后执行**beanPostProcessor的after**方法。到这里实例化就结束了。
+之后会通过**BeanPostProcesser**后置处理器，该处理器有两个方法，**before和after**。先执行**BeanPostBeforeProcessor**方法，之后执行**InvokeInitMethod**方法，比如**@PostConstruct**，实现了tializatingBean接口的方法。最后执行**beanPostProcessor的after**方法。这里就初始化完了。然后会把二级缓存给remove掉，塞到一级缓存中。我们自己去getBean的时候，实际上拿到的是一级缓存的。
 
 销毁的时候就看有没有配置相关的destroy方法，执行就完事了
 
@@ -180,6 +180,6 @@ java -jar XXX.jar --server.port=8007
 ### 4、springboot自动装配
 
 ```java
-主配置类启动，通过@SringBootApplication 中的@EnableAutoConfguration 加载所需的所 有自动配置类，然后自动配置类生效并给容器添加各种组件。那么@EnableAutoConfguration 其实是通过它里面的@AutoConfigurationPackage 注解，将主配置类的所在包皮下面所有子包 里面的所有组件扫描加载到 Spring 容器中; 还通过@EnableAutoConfguration 里面的 AutoConfigurationImportSelector 选择器中的 SringFactoriesLoader.loadFactoryNames()方法，获取类路径下的 META-INF/spring.factories 中的 资源并经过一些列判断之后作为自动配置类生效到容器中，自动配置类生效后帮我们进行自 动配置工作，就会给容器中添加各种组件:这些组件的属性是从对应的 Properties 类中获取 的，这些 Properties 类里面的属性又是通过@ConfigurationProperties 和配置文件绑定的:所以 我们能配置的属性也都是来源于这个功能的 Properties 类。SpringBoot 在自动配置很多组件 的时候，先判断容器中有没有用户自己配置的(@Bean、@Component)如果有就用用户配置 的，如果没有，才自动配置;如果有些组件可以有多个就将用户配置和默认配置的组合起来
+主配置类启动，通过@SringBootApplication 中的@EnableAutoConfguration 加载所需的所有自动配置类，然后自动配置类生效并给容器添加各种组件。那么@EnableAutoConfguration 其实是通过它里面的@AutoConfigurationPackage 注解，将主配置类的所在包下面所有子包里面的所有组件扫描加载到 Spring 容器中; 还通过 @EnableAutoConfguration 里面的 AutoConfigurationImportSelector 选择器中的 SringFactoriesLoader.loadFactoryNames()方法，获取类路径下的 META-INF/spring.factories 中的资源并经过一些列判断之后作为自动配置类生效到容器中，自动配置类生效后帮我们进行自动配置工作，就会给容器中添加各种组件:这些组件的属性是从对应的 Properties 类中获取的，这些 Properties 类里面的属性又是通过@ConfigurationProperties 和配置文件绑定的，所以 我们能配置的属性也都是来源于这个功能的 Properties 类。SpringBoot 在自动配置很多组件的时候，先判断容器中有没有用户自己配置的(@Bean、@Component)如果有就用用户配置的，如果没有，才自动配置;如果有些组件可以有多个就将用户配置和默认配置的组合起来
 ```
 
