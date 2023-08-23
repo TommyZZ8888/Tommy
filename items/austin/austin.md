@@ -1,6 +1,6 @@
 ==**面试部分**==：
 
-D:\environment\jdk11
+
 
 **消息推送平台承接着站内对各种类型渠道的消息下发，每天承载亿级流量推送。项目主要对用户侧的召回（营销）以及通知消息触达，也同时负责对内网的告警和通知消息发送**。
 
@@ -120,8 +120,17 @@ D:\environment\jdk11
 **系统设计亮点**：
 
 - 全类型渠道消息的生命周期链路追踪：在每个关键处理的阶段上进行埋点，将点位收集到Kafka，Flink统一清洗处理。实时数据写入Redis，离线数据写入Hive，固化出实时和离线的统一推送基础模型
+
 - 消息资源隔离：不同的渠道不同的消息类型互不影响并且利用动态线程池可配置化地对消费能力进行调控
+
 - 拥有完备的消息管理平台基础建设：对系统和应用资源有完整的监控和告警体系、消息模板工单审核、各种消息模板的素材管理、规则引擎快速接入短信渠道消息等等功能
+
+  **流程**：1.web层+send 信息（参数SendRequest） ==》 
+
+  2. api层+send（参数SendRequest）
+
+  3. api-impl层+send（sendRequest组装成sendtaskModel ==》 sendTaskModel组装成processContext ==》前置检查 ==》责任链 ==》 kafka、rabibtmq 发送信息）
+  4. handler层kafka接受消息 ==》  路由到线程池处理消息（丢弃+屏蔽+去重+路由到发送渠道发送消息）
 
 
 
@@ -133,6 +142,10 @@ D:\environment\jdk11
 
 - 不同渠道与种类消息实现消费分离：
 
+  问题：我们使用的是kafka作为消息队列，单个topic，单个group，如果某个渠道的发送接口存在异常，超时，消息就会堵住，因为他们使用同一个消费者消费同一个topic。
+
+  所以单topic，多group，但@kafkalistener是一个注解，传值是spring el表达式和读取某个配置，也不能给每个group定义个消费方法吧。最后翻看spring文档，找到了方案。
+
   > `austin-handler` kafka多个group之间消费是分离的，每个group都会接受到来自同一个topic的相同消息，所以接收到消息后会进行判断，只消费属于自己的消息；在代码中使用了kafka的***AnnotationBeanPostProcessor***动态地指定了Receiver的groupId，并且使用spring的@Header注解作为消费方法的入参，以便Receiver进行对消息是否属于自己管辖的判断（使用groupId和消息中带有的groupId对比）
 
 - 消息高性能消费：
@@ -141,11 +154,29 @@ D:\environment\jdk11
 
 - 不合格的消息不进入消息队列：
 
-  > `austin-service-api-impl` 如果不进行参数校验直接将所有的消息都存入消息队列，终究是一种浪费，因此在消息预处理阶段，使用***责任链模式***，经历参数前置校验、参数组合、参数后置校验后再放入消息队列
+  > `austin-service-api-impl` 在消息发送到消息队列之前，会进行参数校验，如果不进行参数校验直接将所有的消息都存入消息队列，终究是一种浪费，因此在消息预处理阶段，使用***责任链模式***，经历参数前置校验、参数组合、参数后置校验后再放入消息队列
 
 - 消息去重：
 
-  > `austin-handler` 在发送消息前进行消息内容和发送渠道的比对，默认5分钟内同一用户收到的相同内容的消息不发送，默认一天内（24：00）每个用户最多只能收到某个渠道发送的5条消息，大于等于5条的消息进行去重，由于项目的定位是一个消息发送平台，因此不能与业务方耦合，所以使用***模板模式***在代码中***AbstractDeduplicationService***类中定义了一个抽象方法getDeduplicationKey用于业务方自行设计去重逻辑
+  > `austin-handler` 在发送消息前进行消息内容和发送渠道的比对，默认5分钟内同一用户收到的相同内容的消息不发送，默认一天内（24：00）每个用户最多只能收到某个渠道发送的5条消息，大于等于5条的消息进行去重，由于项目的定位是一个消息发送平台，因此不能与业务方耦合，所以使用***模板模式***在代码中***AbstractDeduplicationService***类中定义了一个抽象方法getDeduplicationKey用于业务方自行设计去重逻辑。
+  >
+  > **详细逻辑**：入口类：DeduplicationRuleService通过type选择去重方式构建去重参数，然后根据type选择去重处理类进行去重操作。builder接口方法build用于构建参数，抽象类abstractDeduplicationBuilder实现接口builder，初始化将去重type和当前类作为keyvalue放入map，并定义根据配置设置taskinfo参数，然后频次和内容去重实现接口方法build，调用抽象类方法各自构建去重参数。接下来根据type路由去重处理类，
+  >
+  > **频次去重**（redis，string计数），内容去重（zset滑动窗口去重）两种最终都是过滤掉不符合条件的receiver。
+  >
+  > 频次去重：获取频次去重key列表keys（templateId+receiver+sendChannel） ==》 redis.mget(keys),返回keyvalue的inredisMap  ==》  遍历taskinfo的receiver列表，根据taskinfo+service+receiver获取去重key，inredismap的get方法获取value  ==》  value>param.countNum 就加入过滤的列表，否则放入readyputredismap （key为receiver，value为去重key） ==》 遍历readyputredismap，readyputredismap的value作为key，inredismap获取，放入keyvalues的map（key为去重key，value为发送次数：不为空就累加） ==》 最后pipeliensetEx。
+
+  **内容去重**：遍历 taskinfo的receiver列表  ==》  构建去重key（receiver+templateid+content），当前时间为score，雪花算法id为scorevalue ==》
+
+  加载执行lua脚本 DefaultRedisScript<Long>  redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("limit.lua")));
+
+  ==》 脚本逻辑：移除开始时间窗口之前的数据remrangeByScore ------  查看当前key的列表个数 zcard ------  否超过阈值（没有就zadd，然后expire），超过就加入过滤用户列表
+
+  ```
+  redisUtils.execLimitLua(redisScript, Collections.singletonList(key), String.valueOf(param.getDeduplicationTime() * 1000), score, String.valueOf(param.getCountNum()), scoreValue)) 
+  ```
+
+  
 
 - 消息丢弃：
 
