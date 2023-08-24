@@ -1,7 +1,3 @@
-==**面试部分**==：
-
-
-
 **消息推送平台承接着站内对各种类型渠道的消息下发，每天承载亿级流量推送。项目主要对用户侧的召回（营销）以及通知消息触达，也同时负责对内网的告警和通知消息发送**。
 
 在真正面试的过程中，当面试官让你项目介绍的时候，你就可以这样答：
@@ -36,17 +32,17 @@
 
 这个过程可以这样跟面试官描述：
 
-**1**、在消息推送平台里，我们有个接入层`austin-api`，它是**消息的统一入口**，所有的消息推送都会经过该接入层进行处理。
+**1**、在消息推送平台里，我们有个接入层`api`，它是**消息的统一入口**，所有的消息推送都会经过该接入层进行处理。
 
-**2**、使用消息推送平台的业务方可以简单分为两种角色：运营和技术。如果是技术，他会调用我在接入层暴露的接口。如果是运营，他会使用我的消息推送后台去设置定时任务推送，所以我们会有个推送后台`austin-admin`以及定时任务模块`austin-cron`
+**2**、使用消息推送平台的业务方可以简单分为两种角色：运营和技术。如果是技术，他会调用我在接入层暴露的接口。如果是运营，他会使用我的消息推送后台去设置定时任务推送，所以我们会有个推送后台`admin`以及定时任务模块`cron`
 
 **3**、接入层干的事情比较简单，简单概括就是消息做简单的校验以及参数拼装后就写入到了消息队列
 
-**4**、写到了消息队列之后，自然就有个逻辑层对消息队列的消息进行消费，在我这边叫做`austin-handler`模块，它主要对消息做去重、夜间屏蔽等逻辑，最后就分到不同的消息类型Handler进行消息发送
+**4**、写到了消息队列之后，自然就有个逻辑层对消息队列的消息进行消费，在我这边叫做`handler`模块，它主要对消息做去重、夜间屏蔽等逻辑，最后就分到不同的消息类型Handler进行消息发送
 
 **5**、消息推送平台跟普通消息下发最大的不同是我们是实现对**消息全链路追踪**的，业务方可以通过推送后台实时查看消息下发的情况，针对消息模板和用户都是OK的（比如这个用户是否接收到消息，如果没接收到，那可能是因为什么被过滤了）
 
-**6**、所以消息推送平台会有个实时流的模块，用Flink实现的。我在消息处理的过程中**对多个关键的位置进行埋点**，在Flink对这些信息做清洗处理，实时的会写进Redis、离线的会落到Hive中
+**6**、所以消息推送平台会有个实时流的模块，用Flink实现的。我在消息处理的过程中**对多个关键的位置进行埋点**，在Flink对这些信息做清洗处理，写进Redis
 
 基于这个描述，以及你画的图，面试官一般就能有个比较简单的认知了，至少这个过程中你证明了你这系统是有设计的。有可能听到一半就会被打断问细节的，也可能会听你说完全程，**但至少你要有类似这种描述**
 
@@ -56,15 +52,13 @@
 
 **项目主要负责人**
 
-不要慌，别说自己负责数据库表的设计这种，**如果你是新人，数据库表还轮不到你设计**。`austin`有完整的从零搭建文档，只要你用心研究了，就应该写项目负责人。
-
-如果你只看了几天，并且你认为你几天就能完全搞懂，那我还是劝你不要把austin写在你的项目上。
+不要慌，别说自己负责数据库表的设计这种，**如果你是新人，数据库表还轮不到你设计**。
 
 ## 03、项目技术栈
 
 **SpringBoot、Flink、Redis、Apollo等**
 
-这里把自己熟悉的技术栈拎出来讲讲，不熟悉的就隐藏起来（比如`Spring Data JPA`，你就用过，只知道它的底层实现是Hibernate，那就不要在这里了）。但如果你对`Mybatis`又很了解，你就可以把`Mybatis`加上（反正面试官又看不到代码，你说`Mybatis` 那就是`Mybatis` ，OK？）
+这里把自己熟悉的技术栈拎出来讲讲，不熟悉的就隐藏起来（比如`Spring Data JPA`，你就用过，只知道它的底层实现是Hibernate，那就不要在这里了）。但如果你对`Mybatis`又很了解，你就可以把`Mybatis`加上（反正面试官又看不到代码，你说`Mybatis` 那就是`Mybatis`）
 
 注意的是：这里写的技术栈，自己是要**有点墨水**的（很容易就被问到），为什么使用XXX而不使用XXX啊？当时是怎么考量的。
 
@@ -72,32 +66,22 @@
 
 - docker(容器技术，快速部署中间件)
 - Spring Boot(快速部署环境)
-- Lombok(快速开发)
 - Guava(安全工具类)
 - hutool(便捷开发工具类)
 - OkHttp(由于使用了腾讯sdk，所以暂时在代码中没有使用http调用，如果以后接入了其他厂商的服务，可能会使用http进行调用而不用各个厂商提供的sdk)
 - Logback(日志)
-- Fastjson(包装了对于json和普通对象转换的各种操作)
 - MySQL(数据库)
-- tencentcloud-sdk-java(腾讯云短信sdk)
 - Apache Kafka(消息队列，抗压削峰)
 - Redis(NoSQL，设置唯一key，消息去重)
-- Prometheus(监控核心组件)
-- alertmanager(告警组件，目前未用到，属于Prometheus)
-- Grafana(可视化，与监控告警配合使用)
-- cadvisor(获取服务器上所有docker容器的状态)
-- node-exporter(获取服务器设备情况，属于Prometheus)
 - Apollo(分布式配置中心，统一配置，动态变化，白名单过滤，降低系统维护难度)
 - logRecord(配置注解即可打印日志，非侵入式开发)
-- swagger(自动生成接口文档)
-- Graylog(轻量级ELK，日志聚合组件，统一记录不同程序、不同服务的日志)
 - XXL-JOB(分布式定时任务调度，用来设置一些消息的定时推送)
 
 
 
 ## 04、系统设计亮点
 
-**1**、全类型渠道消息的生命周期链路追踪：在每个关键处理的阶段上进行埋点，将点位收集到Kafka，Flink统一清洗处理。实时数据写入Redis，离线数据写入Hive，固化出实时和离线的统一推送基础模型
+**1**、全类型渠道消息的生命周期链路追踪：在每个关键处理的阶段上进行埋点，将点位收集到Kafka，Flink统一清洗处理。实时数据写入Redis
 
 **2**、消息资源隔离：不同的渠道不同的消息类型互不影响并且利用动态线程池可配置化地对消费能力进行调控
 
@@ -119,18 +103,25 @@
 
 **系统设计亮点**：
 
-- 全类型渠道消息的生命周期链路追踪：在每个关键处理的阶段上进行埋点，将点位收集到Kafka，Flink统一清洗处理。实时数据写入Redis，离线数据写入Hive，固化出实时和离线的统一推送基础模型
+- 全类型渠道消息的生命周期链路追踪：在每个关键处理的阶段上进行埋点，将点位收集到Kafka，Flink统一清洗处理。实时数据写入Redis
 
-- 消息资源隔离：不同的渠道不同的消息类型互不影响并且利用动态线程池可配置化地对消费能力进行调控
+- 消息资源隔离：不同的渠道不同的消息类型互不影响并且利用线程池提高消费性能
 
 - 拥有完备的消息管理平台基础建设：对系统和应用资源有完整的监控和告警体系、消息模板工单审核、各种消息模板的素材管理、规则引擎快速接入短信渠道消息等等功能
 
-  **流程**：1.web层+send 信息（参数SendRequest） ==》 
+  **流程**：1.web层+send 信息（参数SendRequest）  
 
   2. api层+send（参数SendRequest）
 
-  3. api-impl层+send（sendRequest组装成sendtaskModel ==》 sendTaskModel组装成processContext ==》前置检查 ==》责任链 ==》 kafka、rabibtmq 发送信息）
-  4. handler层kafka接受消息 ==》  路由到线程池处理消息（丢弃+屏蔽+去重+路由到发送渠道发送消息）
+     1. api-impl层+send（sendRequest组装成sendtaskModel ==》 sendTaskModel组装成processContext ==》前置检查 ==》责任链 ==》 
+  
+        kafka、rabibtmq 发送信息）
+  
+  3. handler层kafka接受消息 ==》  路由到线程池处理消息（丢弃+屏蔽+去重+路由到发送渠道发送消息）
+  
+  4. 限流后发送消息
+  
+  5. 实时收集点位，写入redis
 
 
 
@@ -142,29 +133,27 @@
 
 - 不同渠道与种类消息实现消费分离：
 
-  问题：我们使用的是kafka作为消息队列，单个topic，单个group，如果某个渠道的发送接口存在异常，超时，消息就会堵住，因为他们使用同一个消费者消费同一个topic。
+  描述：api消息接入层接收到请求后，将请求发往kafka，主题为topic，消息逻辑处理模块监听来自这个topic的消息，在单topic单group情况下，如果某个渠道的发送接口存在异常，超时，消息就会堵住，因为他们使用同一个消费者消费同一个topic的消息。目前采用的是单topic多group的方式解决这个问题，消费是隔离的，生产的topic是共享的。消费端使用@kafkalistener修饰方法，@kafkalistener传值是spring el表达式和读取某个配置，但我们的目的是多个group消费同一个topic，总不能给每个group定义个消费方法。最终还是翻看spring文档，找到了方案。使用kafka的***AnnotationBeanPostProcessor***动态地指定了Receiver的groupId。
 
-  所以单topic，多group，但@kafkalistener是一个注解，传值是spring el表达式和读取某个配置，也不能给每个group定义个消费方法吧。最后翻看spring文档，找到了方案。
-
-  > `austin-handler` kafka多个group之间消费是分离的，每个group都会接受到来自同一个topic的相同消息，所以接收到消息后会进行判断，只消费属于自己的消息；在代码中使用了kafka的***AnnotationBeanPostProcessor***动态地指定了Receiver的groupId，并且使用spring的@Header注解作为消费方法的入参，以便Receiver进行对消息是否属于自己管辖的判断（使用groupId和消息中带有的groupId对比）
+  > 总体来说就是`handler消息逻辑处理模块`使用kafka作为消息队列， kafka多个group之间消费是分离的，每个group都会接受到来自同一个topic的相同消息，所以接收到消息后会进行判断，只消费属于自己的消息；在代码中使用了kafka的***AnnotationBeanPostProcessor***动态地指定了Receiver的groupId，并且使用spring的@Header注解作为消费方法的入参，以便Receiver进行对消息是否属于自己管辖的判断（使用groupId和消息中带有的groupId对比）
 
 - 消息高性能消费：
 
-  > `austin-handler` 定义一个***工厂模式***方法，使用map，消费渠道作为key，线程池作为value，实现不同的消费渠道使用不同的线程池，因为线程池需要占用一定的资源，所以对于不同的线程池应当设置不同的运行参数；使用线程池进行消息消费，可以实现单个渠道的消息消费也是多线程的，这就保证了消息消费的高性能
+  > `handler` 定义一个***工厂模式***方法，使用map，消费渠道作为key，线程池作为value，实现不同的消费渠道使用不同的线程池，因为线程池需要占用一定的资源，所以对于不同的线程池应当设置不同的运行参数；使用线程池进行消息消费，可以实现单个渠道的消息消费也是多线程的，这就保证了消息消费的高性能
 
 - 不合格的消息不进入消息队列：
 
-  > `austin-service-api-impl` 在消息发送到消息队列之前，会进行参数校验，如果不进行参数校验直接将所有的消息都存入消息队列，终究是一种浪费，因此在消息预处理阶段，使用***责任链模式***，经历参数前置校验、参数组合、参数后置校验后再放入消息队列
+  > `service-api-impl` 在消息发送到消息队列之前，会进行参数校验，如果不进行参数校验直接将所有的消息都存入消息队列，终究是一种浪费，因此在消息预处理阶段，使用***责任链模式***，经历参数前置校验、参数组合、参数后置校验后再放入消息队列
 
 - 消息去重：
 
-  > `austin-handler` 在发送消息前进行消息内容和发送渠道的比对，默认5分钟内同一用户收到的相同内容的消息不发送，默认一天内（24：00）每个用户最多只能收到某个渠道发送的5条消息，大于等于5条的消息进行去重，由于项目的定位是一个消息发送平台，因此不能与业务方耦合，所以使用***模板模式***在代码中***AbstractDeduplicationService***类中定义了一个抽象方法getDeduplicationKey用于业务方自行设计去重逻辑。
+  > `handler` 在发送消息前进行消息内容和发送渠道的比对，默认5分钟内同一用户收到的相同内容的消息不发送，默认一天内（24：00）每个用户最多只能收到某个渠道发送的5条消息，大于等于5条的消息进行去重，由于项目的定位是一个消息发送平台，因此不能与业务方耦合，所以使用***模板模式***在代码中***AbstractDeduplicationService***类中定义了一个抽象方法getDeduplicationKey用于业务方自行设计去重逻辑。
   >
   > **详细逻辑**：入口类：DeduplicationRuleService通过type选择去重方式构建去重参数，然后根据type选择去重处理类进行去重操作。builder接口方法build用于构建参数，抽象类abstractDeduplicationBuilder实现接口builder，初始化将去重type和当前类作为keyvalue放入map，并定义根据配置设置taskinfo参数，然后频次和内容去重实现接口方法build，调用抽象类方法各自构建去重参数。接下来根据type路由去重处理类，
   >
-  > **频次去重**（redis，string计数），内容去重（zset滑动窗口去重）两种最终都是过滤掉不符合条件的receiver。
+  > **频次去重**（redis，string计数），内容去重（zset滑动窗口去重）两种最终过滤掉不符合条件的receiver。
   >
-  > 频次去重：获取频次去重key列表keys（templateId+receiver+sendChannel） ==》 redis.mget(keys),返回keyvalue的inredisMap  ==》  遍历taskinfo的receiver列表，根据taskinfo+service+receiver获取去重key，inredismap的get方法获取value  ==》  value>param.countNum 就加入过滤的列表，否则放入readyputredismap （key为receiver，value为去重key） ==》 遍历readyputredismap，readyputredismap的value作为key，inredismap获取，放入keyvalues的map（key为去重key，value为发送次数：不为空就累加） ==》 最后pipeliensetEx。
+  > 频次去重：获取频次去重key列表keys（templateId+receiver+sendChannel） ==》 redis.mget(keys),返回keyvalue的inredisMap  ==》  遍历receiver列表，根据taskinfo+service+receiver获取去重key，inredismap的get方法获取value  ==》  value>param.countNum 就加入过滤的列表，否则放入readyputredismap （key为receiver，value为去重key） ==》 遍历readyputredismap，readyputredismap的value作为key，inredismap获取，放入keyvalues的map（key为去重key，value为发送次数：不为空就累加） ==》 最后pipeliensetEx。
 
   **内容去重**：遍历 taskinfo的receiver列表  ==》  构建去重key（receiver+templateid+content），当前时间为score，雪花算法id为scorevalue ==》
 
@@ -180,15 +169,15 @@
 
 - 消息丢弃：
 
-  > `austin-handler` 本可以在austin-api处实现丢弃逻辑，但是可能大部分时候消息是放在在MQ中的，所以丢弃功能在austin-handler中实现
+  > `handler` 本可以在austin-api处实现丢弃逻辑，但是可能大部分时候消息是放在在MQ中的，所以丢弃功能在austin-handler中实现
 
 - 消息定时推送
 
-  > `austin-corn` 消息业务有定时推送的需求，因此项目引入了XXL-JOB分布式定时任务框架，该框架支持注册多个执行器，这样就可以将某个任务交给某一台机器处理
+  > `corn` 消息业务有定时推送的需求，因此项目引入了XXL-JOB分布式定时任务框架，该框架支持注册多个执行器，这样就可以将某个任务交给某一台机器处理
 
 - 任务延时处理
 
-  > `austin-cron` 避免任务的大量出现影响性能，利用List定义内存中的任务队列，设置队列的大小和积压时间，通过定制化@Async注解实现异步执行任务
+  > `cron` 避免任务的大量出现影响性能，利用List定义内存中的任务队列，设置队列的大小和积压时间，通过定制化@Async注解实现异步执行任务
 
 
 
