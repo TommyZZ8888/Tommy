@@ -12,75 +12,411 @@ kafka-server-start.bat config\server.properties
 
 ## 教程
 
-### 1.kafka概述
+## 1.kafka概述
 
-##### 1.1 定义
+### 1.1 定义
 
 ​	kafka是一个分布式的基于发布/订阅模式的消息队列（message queue），主要应用于大数据实时处理领域。
 
-##### 1.2 消息队列
+### 1.2 消息队列
 
-###### 1.2.1 传统消息队列的应用场景
+##### 1.2.1 传统消息队列的应用场景
 
 ![消息队列应用场景](..\img\middleware\kafka\消息队列应用场景.png)
 
 
 
+**使用消息队列的好处：**
+
+1.**解耦**
+
+​	允许独立的扩展或修改两边的处理过程，只要确保它们遵守同样的接口约束。
+
+2.**可恢复性**
+
+​	系统的一部分组件失效时，不会影响整个系统。消息队列降低了进程间的耦合度，所以即使一个处理消息的进程挂掉，加入队列的消息仍然可以在系统恢复后被处理。
+
+3.**缓冲**
+
+​	有助于控制和优化数据经过系统的速度，解决生产消息和消费消息的处理速度不一致的情况
+
+4.**灵活性和峰值处理能力**
+
+​	使用消息队列能够使关键组件顶住突发的访问压力，而不会因为突发的超负荷的请求而完全崩溃。
+
+5.**异步通信**
+
+很多时候，用户不想也不需要立即处理消息。消息队列提供了异步处理机制，允许用户把一个消息放入队列，但不立即处理它，想向队列中放入多少消息就放入多少，然后在需要的时候再去处理。
+
+##### 1.2.2 消息队列的两种形式
+
+1. **点对点模式(一对一，消费者主动拉取数据，消息收到后消息清除)**
+
+   消息生产者生产消息发送到Queue中，然后消费者从Queue中取出并消费消息。消息被消费以后，Queue中不再存储，所以消费者不可能消费到已经被消费的消息。Queue支持存在多个消费者，但对于一个消息而言，只有一个消费者可以消费。
+
+   ![image-20231014163119969](..\img\middleware\kafka\点对点.png)
+
+2. **发布、订阅模式（一对多，消费者消费消息之后不会清除消息）**
+
+   消息生产者（发布）将消息发布到topic中，同事有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic中的消息会被所有订阅者消费。
+
+![image-20231014164311262](..\img\middleware\kafka\发布订阅.png)
 
 
 
+### 1.3 kafka基础架构
+
+![image-20231014164400065](..\img\middleware\kafka\kafka架构.png)
+
+**1. Producer**
+
+​	消息生产者，就是向kafka broker发消息的客户端
+
+**2.Consumer**
+
+​	消息消费者，向kafka broker取消息的客户端
+
+**3.Consumer** **Group**
+
+​	消费者组，由多个Consumer组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个组内的消费者消费；消费者组间互不影响。所有的消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。
+
+**4.Broker**
+
+​	一台kafka服务器就是一个broker。一个集群由多个broker组成。一个broker可以容纳多个topic
+
+**5.topic**
+
+​	可以理解为一个队列，生产者和消费者面向都是一个topic
+
+**6.Partition**
+
+​	为了实现拓展性，一个非常大的topic可以分不到多个broker上，一个topic可以分为多个partition，每个partition都是一个有序的队列。
+
+**7.Replication**
+
+​	副本，为保证集群中某个节点发生故障时，该节点上的partition数据不丢失，且kafka仍然可以继续工作，kafka提供了副本控制，一个topic的每个分区都有若干个副本，一个leader和若干个follower。
+
+**8.leader**
+
+​	每个分区多个副本的“主”，生产者发送数据的对象，以及消费者消费数据时的对象都是leader。
+
+**9.follower**
+
+​	每个分区多个副本的“从”，实时从leader中同步数据，保持和leader数据的同步。leader发生故障时，某个follower会成为新的leader。
 
 
 
+## 2.Kafka 的安装
+
+### 2.1 安装地址
+
+[Kafka 官网](https://kafka.apache.org/)
+
+### 2.2 安装流程
+
+1. 将下载好的安装包上传到 Linux 服务器。（我这里使用的是 kafka_2.11-0.11.0.0.tgz）
+   2. 解压安装包到指定目录。
+
+```shell
+tar -zxvf kafka_2.11-0.11.0.0.tgz -C /opt/module/
+```
+
+3. 修改解压后的文件名称。
+
+```shell
+mv kafka_2.11-0.11.0.0/ kafka
+```
+
+4. 在 /opt/module/kafka 目录下创建 logs 文件夹。
+
+```shell
+mkdir logs
+```
+
+5. 修改 config 目录下的配置文件 server.properties。
+   输入以下内容：
+
+```shell
+#broker 的全局唯一编号，不能重复
+broker.id=0
+#删除 topic 功能使能
+delete.topic.enable=true
+#处理网络请求的线程数量
+num.network.threads=3
+#用来处理磁盘 IO 的现成数量
+num.io.threads=8
+#发送套接字的缓冲区大小
+socket.send.buffer.bytes=102400
+#接收套接字的缓冲区大小
+socket.receive.buffer.bytes=102400
+#请求套接字的缓冲区大小
+socket.request.max.bytes=104857600
+#kafka 运行日志存放的路径
+log.dirs=/opt/module/kafka/data
+#topic 在当前 broker 上的分区个数
+num.partitions=1
+#用来恢复和清理 data 下数据的线程数量
+num.recovery.threads.per.data.dir=1
+#segment 文件保留的最长时间，超时将被删除
+log.retention.hours=168
+#配置连接 Zookeeper 集群地址
+zookeeper.connect=master:2181,slave1:2181,slave2:2181
+```
+
+6. 将 kafka 目录分发到另外两台机器上。
+   ```shell
+   scp kafka/ master:/opt/module/
+   
+   scp kafka/ slave2:/opt/module/
+   
+   ```
+
+   7. 在另外两台机器上修改配置文件 /opt/module/kafka/config/server.properties 中的 broker.id=1、broker.id=2（broker.id 不得重复）
+
+8. 配置环境变量。
+
+```shell
+vim /etc/profile
+```
+
+
+添加以下内容：
+
+```shell
+#KAFKA_HOME
+export KAFKA_HOME=/opt/module/kafka
+export PATH=$PATH:$KAFKA_HOME/bin
+
+```
+
+让配置文件生效：
+
+ ```she
+ source /etc/profile
+ ```
+
+在另外两台机器做以上操作。
+
+9. 启动集群。
+
+依次在 master、slave1、slave2 节点上启动 Kafka。
+
+```she
+kafka-server-start.sh -daemon /opt/module/kafka/config/server.properties
+```
+
+10. 关闭集群。
+
+依次在 master、slave1、slave2 节点上关闭 Kafka。
+
+```she
+kafka-server-stop.sh stop
+```
+
+11. 在 /opt/module/kafka/bin 目录下编写群起群关脚本 kk.sh，方便以后使用。
+    ```she
+    vim kk.sh
+    ```
+
+
+    ```shell
+    11. #!/bin/bash
+    
+    case $1 in
+    "start"){
+      for i in master slave1 slave2
+        do
+          echo "****************** $i *********************"
+          ssh $i "source /etc/profile && /opt/module/kafka/bin/kafka-server-start.sh -daemon /opt/module/kafka/config/server.properties"
+        done
+    };;
+    
+    "stop"){
+      for i in master slave1 slave2
+        do
+          echo "****************** $i *********************"
+          ssh $i "/opt/module/kafka/bin/kafka-server-stop.sh"
+        done
+    };;
+    
+    esac
+    ```
+
+    ```she
+    chmod 777 kk.sh
+    ```
+
+
+    ![image-20231014171320208](..\img\middleware\kafka\演示截图1.png)
+    
+
+说明：kafka集群关闭时会需要一些时间
 
 
 
+### 2.3 Kafka 命令行操作
+
+1. 创建 topic。
+
+```shell
+kafka-topics.sh --zookeeper slave1:2181 --create --replication-factor 3 --partitions 2 --topic demo
+```
+
+![image-20231014171506569](..\img\middleware\kafka\创建topic.png)
+
+2. 查看当前服务器中所有的 topic。
+   ```shell
+   kafka-topics.sh --zookeeper slave1:2181 --list
+   ```
+
+   ![image-20231014171547419](..\img\middleware\kafka\查看topic.png)
+
+3. 查看某个 topic 的详情。
+   ```shell
+   kafka-topics.sh --zookeeper slave1:2181 --describe --topic demo
+   ```
+
+   ![image-20231014171722107](..\img\middleware\kafka\查看某个topic详情.png)
+
+4. 删除 topic。
+   ```shell
+   kafka-topics.sh --zookeeper slave1:2181 --delete --topic first
+   ```
+
+   ![image-20231014171804977](..\img\middleware\kafka\删除topic.png)
+
+5. 发送消息。
+   ```shell
+   kafka-console-producer.sh --broker-list slave1:9092 --topic demo
+   ```
+
+   ![image-20231014171831137](..\img\middleware\kafka\发送消息.png)
+
+6. 消费消息。
+   （1）方法一
+
+```shell
+ kafka-console-consumer.sh --zookeeper slave1:2181 --topic demo
+```
+
+![image-20231014171929258](..\img\middleware\kafka\消费消息1.png)
+
+注意： 该方法已经过时。
+
+（2）方法二
+
+```shell
+kafka-console-consumer.sh --bootstrap-server slave1:9092 --topic demo
+```
+
+![image-20231014171900273](..\img\middleware\kafka\消费消息2.png)
+
+说明： 在以上两种方法的命令上添加 –from-beginning 参数会把主题中以往所有的数据都读取出来。
 
 
 
+## 3. kafka 架构深入理解
+
+### 3.1 kafka工作流程
+
+![image-20231014172059009](..\img\middleware\kafka\kafka工作流程.png)
 
 
 
+​	kafka中消息是以topic进行分类的，生产者生产消息，消费者消费消息，都是面向topic的。topic是逻辑上的概念。而partition是物理上的概念，每个partition对应一个log文件，该文件存储的就是producer生产的数据。producer生产的数据会不断追加到该log文件末端，且每条数据都有自己的offset。消费者组中每个消费者，都会实时记录自己消费到了哪个offset，以便出错恢复时，从上次的位置继续消费。
+
+### 3.2 kafka 文件存储机制
+
+![image-20231014205312019](..\img\middleware\kafka\文件存储机制.png)
 
 
 
+​	由于生产者生产的消息不断追加到log文件末端，为防止log文件过大导致数据定位效率低下，kafka采取了分片和索引机制，将每个partition分为多个segment。每个segment对应两个文件，“.index”文件和“.log”文件。这些文件位于一个文件夹下，该文件夹命名规则为：topic名称+分区序号。例如demo这个topic有两个分区，则其对应的文件夹为demo-0，demo-1.
+
+![image-20231014205821517](..\img\middleware\kafka\image-20231014205821517.png)
 
 
 
+"index"文件存储大量的索引信息，“.log”文件存储大量的数据，索引文件中的元数据指向对应数据文件中message的物理偏移地址。
 
 
 
+### 3.3 kafka生产者
+
+##### 3.3.1 分区策略
+
+1. 分区的原因
+
+   （1）方柏霓在集群中扩展，每个partition可以通过调整以适应他们的机器，而一个topic又可以有多个partition组成，因此整个集群就可以适应任意大小的数据了。
+
+   （2）可以提高并发，因为可以以partition为单位读写。
+
+2. 分区的原则
+
+   我们需要将producer发送的数据封装成一个producerRecord对象
+
+   ![image-20231014210603611](..\img\middleware\kafka\发送方法.png)
+
+​		(1) 指明partition的情况下，直接将指明的值作为partition值；
+
+​		(2）没有指明partition值但有key的情况下，将key值与topic的partition数进行取余得到partition值；
+
+​		(3)  既没有partition又没有key值的情况下，第一次调用时随机生成一个整数（后面每次调用在这个整数上自增），将这个值与topic可用的partition总数取余得到partition值，也就是常说的round-robin（轮询）算法。
+
+##### 3.3.2 数据可靠性保证
+
+​		为保证producer发送的数据，能可靠的发送到指定的topic，topic中的每个partition收到producer发送的数据后，都需要producer发送ack，如果producer收到ack，就会进行下一轮的发送，否则重新发送数据。
+
+![image-20231014211732317](..\img\middleware\kafka\数据可靠性保证.png)
+
+1. **副本同步策略**
+
+   | 方案                        | 优点                                               | 缺点                                                |
+   | --------------------------- | -------------------------------------------------- | --------------------------------------------------- |
+   | 半数以上完成同步，就发送ack | 延迟低                                             | 选取新的leader时，容忍n台节点的故障，需要2n+1个副本 |
+   | 全部完成同步，就发送ack     | 选取新的leader时，容忍n台节点的故障，需要n+1个副本 | 延迟高                                              |
+
+   kafka采用的是第二种方案。因为第一种方案会造成大量数据的冗余，虽然第二种方案的网络延迟会比较高，但网络延迟对kafka的影响较小。
+
+2.  **ISR**
+
+   ​	kafka采用第二种方案后，可能会出现一个问题：leader收到数据后，所有的follower都开始同步数据，但当某个follower因为故障，迟迟不能与leader进行同步，那么leader就要一直等下去，直到它完成同步，才能发送ack。
+
+   ​	为了解决这个问题，leader维护了一个动态的in-sync replica（ISR），意味着和leader保持同步的follower集合。当ISR中的follower完成数据同步后，leader就会给producer发送ack。如果follower长时间未向leader同步数据，则该follower将被提出ISR，该时间阈值由replica.log.time.max.ms参数设定。leader发生故障后，就会从ISR中选取新的leader。
+
+3.  **ack应答机制**
+
+​			对于某些不太重要数据，对数据的可靠性要求不是很高，能够容忍少量的数据丢失，所以没必要等ISR中所有follower全部接收成功。
+
+​			kafka为用户提供了三种可靠性级别。
+
+​																acks参数配置
+
+| acks参数取值 | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 0            | producer不等待broker的ack，这一操作提供一个最低延迟，broker-接收还没有写入磁盘就已经返回，当broker故障时可能丢失数据。 |
+| 1            | producer等待broker的ack，partition的leader落盘成功后返回ack，如果在follower同步之前，leader故障，那么将会丢失数据 |
+| -1           | producer等待broker的ack，partition的leader和follower全部落盘成功后才返回ack，但是如果在follower同步完成后，broker发送ack之前，leader发生故障，那么会造成数据重复。 |
 
 
 
+4.**故障处理细节**
+
+![image-20231014214227505](..\img\middleware\kafka\故障处理细节.png)
+
+**LEO**: 指的是每个副本最大的offset。
+
+**HW**：指的是消费者能见到的最大的offset，ISR队列中最小的LEO
 
 
 
+​	（1）**follower故障**
 
+​				follower发生故障之后会被临时踢出ISR，待follower恢复之后，follower会读取本地磁盘记录上次的HW，并将log文件高于HW的部分裁掉，从HW开始向leader进行同步。等待followers的LEO大于等于该partition的HW，即follower追上leader之后，就可以重新加入ISR了。
 
+​	（2）**leader故障**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+​				leader发生故障后，会从ISR中选出一个新的leader，之后为保证多个副本间的数据一致性，其余的 follower 会先将各自的 log 文件高出 HW 的部分裁掉，然后从新的 leader 同步数据。
 
 
 
