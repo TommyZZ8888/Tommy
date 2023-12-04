@@ -241,14 +241,14 @@ kafka-server-stop.sh stop
     
     esac
     ```
-
+    
     ```she
     chmod 777 kk.sh
     ```
 
 
     ![image-20231014171320208](..\img\middleware\kafka\演示截图1.png)
-    
+
 
 说明：kafka集群关闭时会需要一些时间
 
@@ -480,7 +480,7 @@ kafka-console-consumer.sh --bootstrap-server slave1:9092 --topic demo
 
 
 
-**面试题总结**：
+# **面试题总结**：
 
 **Q:讲一下Kafka。**
 [Kafka 入门一篇文章就够了](https://juejin.im/post/5ddf5659518825782d599641#heading-1)
