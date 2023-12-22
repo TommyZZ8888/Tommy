@@ -315,3 +315,18 @@ update b set aaa=(select max from (select max(MAX_def_60M) as max from b) as tem
 加一层子查询之后成功的原因（待补充）：
 
 mysql在from子句中遇到子查询时，先执行子查询并将结果放到一个临时表中，我们通常称它为“派生表”；临时表是没有索引、无法加锁的。
+
+##### 2.bat批文件执行.sql脚本文件导入MySQL数据库乱码问题
+往mysql数据库中导入sql文件，数据库中竟然显示乱码，数据库格式以及脚本文件都设置为utf-8。不知为什么会这样？
+
+可能的原因：
+
+使用可视化工具导出MySQL数据时，当数据量大时，导出不会错误，但导入时会出现错误，比如MySQL数据库导入SQL文件时出现乱码。
+使用命令行导入数据时会出现如下这类的错误：
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_BSD SET_CLIENT */’ at line 1
+这是因为命令行模式下不能认出SQL文件格式造成，可以将SQL文件另存为UTF-8 NO BOM格式，然后进行导入。
+另外在导入数据时，如果目标数据库或表是UTF-8字符集的， 而导入SQL中有中文，可能在最终结果中出现乱码
+尝试了很多方法后，有了一个解决方案，如下：
+
+此时只需在导入的SQL文件第一行加入如下内容即可：
+/*!40101 SET NAMES utf8 */;
