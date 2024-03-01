@@ -1329,7 +1329,87 @@ acks 参数指定了要有多少个分区副本接收消息，生产者才认为
 
 
 
+##### 可靠性，副本
 
+多副本，ISR机制
+
+kafka主要通过ISR机制保证消息可靠性，ISR（in sync replicas）是kafka动态维护的一组副本，在ISR中有成员存活时，只有这个组的成员才可以成为leader，内部保存的为每次提交信息时必须要同步的副本，每当leader挂掉时，在ISR集合中选举出follower作为leader，当ISR中副本被认为挂掉时，会被剔除ISR，重新同步leader的消息后，才会重新进入ISR。
+
+副本机制：
+
+AR：AR副本集合 (Assigned Replicas)：分区Partition中的所有Replica组成AR副本集合。
+
+ISR：所有与Leader副本能保持一定程度同步的Replica组成ISR副本集合，其中也包括 Leader副本
+
+OSR：与Leader副本同步滞后过多的Replica组成OSR副本集合。
+
+kafka不是读写分离：在kafka中一个topic的每个分区都有若干个副本，分为leader和follower，follower副本不对外提供服务，所有的读写请求都必须先发往leader副本所在的broker，由broker负责处理，follower做的只是从leader副本异步拉取信息，并写入自己的提交日志里，	实现与leader的同步。
+
+**HW**：即高水位，标识着一个特定消息偏移量offset，消费者只能拉取这个水位offset之前的消息。
+
+**LEO**：日志末端位移，代表日志文件中下一条待写入消息的offset，这个offset实际上没有消息的，不管是leader副本还是follower副本，都有这个值。
+
+**Kafka怎么保证一致性**
+
+定义：若某条消息对client可见，那么即使leader挂了，在新leader上数据依然可以被读到。
+
+HW-HighWaterMark: client可以从Leader读到的最大msg offset，即对外可见的最大offset， HW=max(replica.offset)
+对于Leader新收到的msg，client不能立刻消费，Leader会等待该消息被所有ISR中的replica同步后，更新HW，此时该消息才能被client消费，这样就保证了如果Leader fail，该消息仍然可以从新选举的Leader中获取。
+对于来自内部Broker的读取请求，没有HW的限制。同时，Follower也会维护一份自己的HW，Folloer.HW = min(Leader.HW, Follower.offset)
+
+##### 重复消费
+
+一般情况下都是未正常提交offset导致，比如网络异常，消费者宕机.
+
+将kafka消费者的配置enable-auto-commit设为false，禁止kafka自动提交offset，避免提交失败重复消费，
+
+将消息的唯一标识保存起来，每次消费进行重新判断。
+
+##### 消息pull push
+
+生产者是push，消费者是pull。
+
+push，即时性，可以在broker获取消息后马上送达消费者
+
+pull模式可以根据comsumer的消费能力以适当的速率消费消息
+
+消费者可以自行决定消费的速率，不足之处在于，如果kafka没有数据，消费者可能会一直轮询，一直返回空数据，针对这一点，kafka的消费者在消费数据时会传入一个时常参数timeout，如果没有数据可供消费，consumer会等待一段时间再返回。
+
+##### 低延时，高吞吐
+
+对于producer端：希望消息可以尽快发送出去，必须设置linger-ms=0，同时关闭压缩，另外设置acks=1，减少副本同步时间
+
+对于consumer端，之保持fetch-min-bytes=1，即broker端只要有能返回的数据，就立即返回给consumer，减少延时。
+
+linger.ms：表示批次缓存时间，如果数据迟迟未达到batch.size，sender 等待 linger.ms 之后就会发送数据。单位 ms，默认值是 0，意思就是消息必须立即被发送。
+如果设置的太短，会导致频繁网络请求，吞吐量下降；
+如果设置的太长，会导致一条消息需要等待很久才能被发送出去，增加网络延时。
+所以适当增加会提高吞吐量，建议10~100毫秒。
+fetch.min.bytes：表示只要 Broker 端积攒了多少数据，就可以返回给 Consumer 端。默认值1字节，适当增加该值为1kb或者更多
+
+
+
+##### 存储
+
+kafka使用日志文件的方式保存生产者和发送者的消息，每条消息都有一个offset值表示它在分区的偏移量。
+
+kafka中一般存储的海量的消息数据，为了避免日志文件过大，一个分片并不是对应磁盘上一个日志文件，而是对应磁盘上一个目录，
+
+特点：kafka把主题中一个分区划分成多个分段的小文件段，通过多个小文件段，可以容易根据偏移量查找消息，定期清除和删除已经完成的数据文件，减少磁盘容量的占用。
+
+kafka将消息追加的操作逻辑变为日志数据文件的顺序写入，极大提高磁盘io性能
+
+
+
+kafka集群中leader选举：kafka在zookeeper上针对每个topic都维护了一个ISR的集合，集合的增删kafka都会记录该记录，如果分区leader不可用，kafka就会在集合中选择一个副本作为leader。
+
+zookeeper作用：主要用来集群元数据管理，集群协调工作，在每个kafka服务器启动的时候去连接并将自己注册到zookeeper，类似注册中心
+
+kafka2.8版本开始移除zookeeper：
+
+集群运维层面：kafka本身是一个分布式系统，如果还需要重度依赖zookeeper，集群运维成本和集群复杂度都很高。
+
+集群性能层面：zookeeper架构涉及并不适合这种高频的读写更新操作，由于之前提交offset的操作都在zookeeper里面，这样的话会严重影响zookeeper集群性能。
 
 
 
