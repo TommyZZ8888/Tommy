@@ -777,6 +777,22 @@ http和rpc，http是应用层协议，主要强调网络通信，rpc是分布式
 
 feign基于http，dubbo基于rpc
 
+**实现**：
+
+首先通过@enablefeignclient注解开启feignclient的功能，只有这个注解存在，才会在程序启动时开启对@feignclient注解包的扫描。
+
+根据feign的规则实现接口，并在接口上面加上feignclient的注解
+
+程序启动后，会进行包扫描，扫描所有的@feignclient注解的类，并将这些信息注入到ioc容器中
+
+当接口的方法被调用时，通过jdk代理来生成具体的requestTemplate模板对象。
+
+根据requestTemplate再生成http请求的request对象。
+
+然后交给client去处理，client的网络请求框架可以是httpclient和OKhttp。
+
+最后Client被封装到LoadBalanceClient类，这个类结合类Ribbon做到了负载均衡。
+
 
 
 feign是一个声明式的web服务客户端，简化了使用基于http的远程服务的开发
