@@ -1446,6 +1446,31 @@ kafka2.8版本开始移除zookeeper：
 
 
 
+### Linux
+
+##### 根据关键词查看日志 并返回关键词所在行：
+
+_方法一：_cat 文件名 | grep “关键词”
+
+cat log.log | grep “train”　　# 返回log.log中包含train的所有行
+
+_方法二：_grep -i “关键词” 文件名 （与方法一效果相同，写法不同）
+
+grep -i “train” log.log　　# 返回log.log中包含train的所有行
+
+
+
+```
+文件处理命令：ls mkdir cd pwd rmdir cp mv rm touch cat tac more less head tail ln
+权限管理命令：chmod chown chgrp umask
+文件搜索：find locate which where is grep
+帮助命令：man whatis apropos --help help
+用户管理命令：user add passwd who w
+压缩解压命令：gzip gunzip tar zip unzip bzip2 bunzip2
+网络命令：write wall ping ifconfig mall last traceroute netstat setup mount
+关机重启命令：shutdown
+```
+
 
 
 
@@ -1535,3 +1560,25 @@ Lock可以使用读锁提高多线程读效率。
 poi问题：poi解析大部分使用的是usermode模式。内存消耗较大：一个几m的文件解析可能要用到上百m内存。
 
 easyexcel文件解压和读取是通过文件的方式，不再是poi内存方式；采用sax模式一行一行解析，并将一行的解析结果以观察者的模式通知处理；解析时抛弃了样式字体宽度等无关紧要的数据。
+
+
+
+
+
+```
+import java.util.Scanner;
+
+// 注意类名必须为 Main, 不要有任何 package xxx 信息
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        // 注意 hasNext 和 hasNextLine 的区别
+        while (in.hasNextInt()) { // 注意 while 处理多个 case
+            int a = in.nextInt();
+            int b = in.nextInt();
+            System.out.println(a + b);
+        }
+    }
+}
+```
+
