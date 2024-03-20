@@ -590,3 +590,8 @@ MySQL数据库文件的存放路径：/var/lib/mysql/
   `存在的文件：b.frm、b.MYD、b.MYI`
 - mysql8.0以及之后的版本（把frm的信息移动到sdi）
   `存在的文件：b.xxx.sdi、b.MYD、b.MYI`
+
+  类型转换
+                          0 + CAST(cast(third_size as decimal) / 100 as char)
+                          0 + cast(substring_index(substring_index(specification, '*', 1), 'δ', -1) as char)
+
