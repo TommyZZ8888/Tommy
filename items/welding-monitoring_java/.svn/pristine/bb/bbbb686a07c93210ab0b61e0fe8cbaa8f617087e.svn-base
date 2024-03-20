@@ -1,0 +1,14 @@
+package com.vren.weldingmonitoring_java;
+
+public class Test2 {
+
+
+    public static void main(String[] args) throws Exception {
+        String name = "10.0";
+        String[] split = name.split("\\.");
+        String s = split[split.length - 1];
+        System.out.println(s);
+    }
+
+
+}

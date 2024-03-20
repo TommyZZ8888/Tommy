@@ -1,0 +1,63 @@
+package com.vren.weldingmonitoring_java.socket.server;
+
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.*;
+
+/**
+ * @ClassName:SocketListener
+ * @Author: vren
+ * @Date: 2022/8/1 17:50
+ */
+@Component
+@Slf4j
+public class SocketListener implements CommandLineRunner {
+
+    public String getImages() {
+        return images;
+    }
+
+    private String images;
+
+    private static final ExecutorService executorService = new ThreadPoolExecutor(300, 500, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(1000), Executors.defaultThreadFactory(), new ThreadPoolExecutor.DiscardPolicy());
+
+    @Override
+    public void run(String... args) {
+        executorService.execute(() -> {
+            ServerSocket image;
+            try {
+                image = new ServerSocket(7777);
+                executorService.execute(new Thread(() -> {
+                    log.info(" socket listening 7777");
+                    while (true) {
+                        String result;
+                        try {
+                            Socket socket2 = image.accept();
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
+                            while ((result = bufferedReader.readLine()) != null) {
+                                ImageBody imageBody = JSONObject.parseObject(result, ImageBody.class);
+                                images = imageBody.getPicture();
+                                NoticeWebsocketResp noticeWebsocketResp = new NoticeWebsocketResp();
+                                noticeWebsocketResp.setNoticeType("IMAGE");
+                                noticeWebsocketResp.setNoticeInfo(imageBody);
+                                executorService.execute(() -> WebsocketServer.sendMessage(noticeWebsocketResp));
+                            }
+                            images = null;
+                        } catch (Exception e) {
+                            log.info("{}", e.getMessage());
+                        }
+                    }
+                }));
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
+        });
+    }
+}

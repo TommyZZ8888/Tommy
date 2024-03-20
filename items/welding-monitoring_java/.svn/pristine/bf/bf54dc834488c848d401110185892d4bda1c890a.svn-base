@@ -1,0 +1,11 @@
+package com.vren.weldingmonitoring_java.wave.domain.dto;
+
+import lombok.Data;
+
+@Data
+public class NoticeMessage {
+
+    private String image;
+
+    private int type;
+}

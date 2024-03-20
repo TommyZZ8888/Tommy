@@ -1560,25 +1560,3 @@ Lock可以使用读锁提高多线程读效率。
 poi问题：poi解析大部分使用的是usermode模式。内存消耗较大：一个几m的文件解析可能要用到上百m内存。
 
 easyexcel文件解压和读取是通过文件的方式，不再是poi内存方式；采用sax模式一行一行解析，并将一行的解析结果以观察者的模式通知处理；解析时抛弃了样式字体宽度等无关紧要的数据。
-
-
-
-
-
-```
-import java.util.Scanner;
-
-// 注意类名必须为 Main, 不要有任何 package xxx 信息
-public class Main {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        // 注意 hasNext 和 hasNextLine 的区别
-        while (in.hasNextInt()) { // 注意 while 处理多个 case
-            int a = in.nextInt();
-            int b = in.nextInt();
-            System.out.println(a + b);
-        }
-    }
-}
-```
-

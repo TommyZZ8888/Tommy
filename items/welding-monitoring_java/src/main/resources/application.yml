@@ -1,0 +1,74 @@
+server:
+    port: 8072
+spring:
+    jackson:
+        property-naming-strategy: SNAKE_CASE
+        date-format: yyyy-MM-dd HH:mm:ss
+        locale: zh
+        time-zone: GMT+8
+    application:
+        name: welding-monitoring
+    datasource:
+        druid:
+            #数据库地址
+            username: root
+            password: 123456
+            url: jdbc:mysql://172.16.16.105/zj_weld_monitor?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+            driver-class-name: com.mysql.cj.jdbc.Driver
+    web:
+        resources:
+            static-locations: classpath:/static/
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
+    servlet:
+        multipart:
+            location: /static/resources/
+            max-file-size: 50MB
+            max-request-size: 50MB
+    resources:
+        static-locations: file:static/resources
+#    filePath: C:/Users/45046/Desktop/welding-monitor/welding-monitoring_java/static/resources/
+mybatis-plus:
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+system:
+    #正常运行电压
+    normal-voltage: 15
+    #静息最大电压
+    resting-voltage: 8
+    #会话持续时长 秒
+    arc-closing-time: 6
+    #异常弧压
+    abnormal-voltage: 25
+    # 异常弧压持续时间 毫秒
+    abnormal-duration: 150
+    #波形时长段 秒
+    duration: 60
+    #接受异常提示的地址
+    image-push-host: 192.168.0.38
+    image-push-port: 8089
+    welding-task-push-host: 192.168.0.38
+    welding-task-push-port: 8092
+    #获取电流电压的地址
+    data-host: 192.168.0.38
+    data-port: 8088
+    #设备ID
+    dev-id: "DevId:10\r\n"
+    evaluate-rule:
+        - [ 0,8,"稳定" ]
+        - [ 8,15 ,"总体稳定，波动性小" ]
+        - [ 15,24,"波动性较大" ]
+    penetration:
+        - { material: "碳钢",size: "DN100",voltage: 9.0 }
+        - { material: "碳钢",size: "DN150",voltage: 8.0 }
+        - { material: "碳钢",size: "DN250",voltage: 9.0 }
+        - { material: "碳钢",size: "DN300",voltage: 9.5 }
+        - { material: "碳钢",size: "DN200",voltage: 9.0 }
+        - { material: "不锈钢",size: "DN150",voltage: 10.0 }
+        - { material: "不锈钢",size: "DN350",voltage: 11.0 }
+        - { material: "不锈钢",size: "DN450",voltage: 12.0 }
+login:
+    password: 123456
+    token: eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1MDk3Q0Q2NTVGQzZGQkI3MzE4RDNCRjlGRjQzQzA0IiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2ODgzNjI5NTgsImV4cCI6MTY4ODQ0OTM1OCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAwMSIsImF1ZCI6WyJCYXNlREJBcGkiLCJDb3N0QXBpIiwiRGV2aWNlQXBpIiwiUHJvY2Vzc0FwaSIsIlByb2R1Y3RBcGkiLCJUZWNobm9sb2d5QXBpIiwiVHVCZVNoZWV0Qm9hcmRBcGkiLCJVc2VyQXBpIiwiV2VDaGF0QXBwbGV0QXBpIiwiV21zQXBpIl0sImNsaWVudF9pZCI6ImFwaUNsaWVudCIsInN1YiI6ImE3YjFkZTJmMGFjMzRjN2Y5NmNkNDlhNjBiYTkyMDNhIiwiYXV0aF90aW1lIjoxNjg4MzYyOTU4LCJpZHAiOiJsb2NhbCIsImlkIjoiYTdiMWRlMmYwYWMzNGM3Zjk2Y2Q0OWE2MGJhOTIwM2EiLCJuYW1lIjoi566h55CG5ZGYIiwicm9sZSI6IjAzNDBhYWExYWU1ZjQwYzk5OGJlMWQ4MmFhMzUwMDM0IiwianRpIjoiQUYzMjRGNTZDM0U5NkY3RjQ2OTIyOTZBNTQzNEVDREIiLCJpYXQiOjE2ODgzNjI5NTgsInNjb3BlIjpbIkJhc2VEQkFwaSIsIkNvc3RBcGkiLCJEZXZpY2VBcGkiLCJQcm9jZXNzQXBpIiwiUHJvZHVjdEFwaSIsIlRlY2hub2xvZ3lBcGkiLCJUdUJlU2hlZXRCb2FyZEFwaSIsIlVzZXJBcGkiLCJXZUNoYXRBcHBsZXRBcGkiLCJXbXNBcGkiXSwiYW1yIjpbInB3ZCJdfQ.QDE0o920YidDzEzaVrLjz3Q5fasVujWMM2km6nyffZePP5bgSmf6zbRBUg5_lH1vHi8LqQRdUJ0_2KItTeCYUZ7oJ_x2CArvMgsKoOO1eB2g5m0-Tzt0aWfwjiksocr1mQozrO-Ta79XbLGnbMJ4TYTfVC3RChO7jPt3G7diJNRTxFs1AzcgNH3QHopdvkj28DgrU-3wEfh-ugTSXvYiEh0LR_LkwNIGXatW9YjQXU3ih1GTCSUUrIFhRS0Xvnjw8ZetRLLX_LUATo_A8DR6GsgtIzTBKFcxpCNsFCIHxbIwjBKBGU8vVVX4ft0AOZEd_2LrgsvvaEfKsiyDadOBBQ
+    upload: http://192.168.0.38:8072/upload/
