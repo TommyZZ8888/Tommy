@@ -523,9 +523,9 @@ readview的规则：
 
 readview生成时机
 
-在读已提交级别下：一个事务中每个读操作都会生成一个readview，所以两个相同的读操作，生成的readview不同，就会造成不可重复读
+在可重复读级别下：一个事务中每个读操作都会生成一个readview，所以两个相同的读操作，生成的readview不同
 
-在可重复读级别下：一个事务中的读操作只会第一次读时生成一个readview，其他读操作复用这个readview，所以可重复读
+在读已提交级别下：一个事务中的读操作只会第一次读时生成一个readview，其他读操作复用这个readview
 
 
 
@@ -1470,6 +1470,53 @@ grep -i “train” log.log　　# 返回log.log中包含train的所有行
 网络命令：write wall ping ifconfig mall last traceroute netstat setup mount
 关机重启命令：shutdown
 ```
+
+
+
+##### find grep more less cat tail head
+
+```bash
+find / -name 1.txt			在根目录下查找名称为1.txt的文件
+find / -name 1.txt -print0|xargs -0 ls -l  -print0 打印 find命令 结果集，用 NULL 字符 ('\0')分割，而不是换行符。
+find /        	在根目录下查找
+find .			在当前目录下查找
+find . -size +10M				基于文件大小查找
+find . -name 1.txt -type d/f	基于类型查找 d目录 f文件
+    
+    
+grep 'a' 1.txt
+grep -n 'a' 1.txt				显示行号
+grep -rn 'a' 1.txt              有文件夹，文件夹内也能搜索到。
+grep -rn 'a' -A/B 2 1.txt		查询到a后向后/前多显示两行
+
+find . -maxDepth 3 -name '.txt' -print0| xargs -0 grep 'docker'
+
+more 1.txt
+more -3 1.txt			3行3行查看 回车键和空格键
+
+head/tail -n 15 1.txt		显示15行（默认显示10行）
+
+df -h			显示linux 磁盘使用情况
+du -h			显示当前目录以及所有子目录的文件占用大小
+du -h -d 1		只查看一级目录下的空间占用大小
+
+```
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
