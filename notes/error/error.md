@@ -330,3 +330,49 @@ ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the ma
 
 此时只需在导入的SQL文件第一行加入如下内容即可：
 /*!40101 SET NAMES utf8 */;
+
+
+
+
+
+
+
+## git
+
+##### 1.可以访问，无法推送
+
+事情是酱紫的，本楼主刚刚在 Rstudio 耕了一篇博客，然而没法推送到 github 仓库上，push 那一步会报错，错误如下。
+
+```vbnet
+ssh: connect to host github.com port 22: Connection timed out
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+
+俺试了下把 wifi 切换成手机热点，不行。试了下挂梯子，可以正常上 github，但是也还是 push 失败。上网搜一通，按照[这里的一个答案](https://stackoverflow.com/questions/15589682/ssh-connect-to-host-github-com-port-22-connection-timed-out)，把`url=git@...:...`改成`yrl=https://.../...`，也还是不行。当然，也试了重启电脑，也是不行滴。
+
+不知有没有哪位小伙伴能想到别的撒招破解这个问题？
+
+后来这个问题是这样解决的。
+
+1. 执行`ssh -T git@github.com`，得到下面的结果，这可能是22这个端口不能用了。
+
+   ```sql
+   ssh: connect to host github.com port 22: Connection timed out
+   ```
+
+2. 执行`ssh -T -p 443 git@ssh.github.com`，回答完 yes 后会得到下面的内容，说明443这个端口可用。
+
+   ```vbnet
+   Hi earfanfan! You've successfully authenticated, but GitHub does not provide shell access.
+   ```
+
+3. 执行`vim ~/.ssh/config`，在打开的文件里面贴入下面的内容，然后摁 ESC 键，输入`:wq`保存，如果再执行`ssh -T git@github.com`，又可以看到 github 回复 Hi 那段，那就可以正常推送了。
+
+   ```undefined
+   Host github.com
+     Hostname ssh.github.com
+     Port 443
+   ```
