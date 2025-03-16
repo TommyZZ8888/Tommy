@@ -333,7 +333,27 @@ ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the ma
 
 
 
+##### 3.排查死锁
 
+首先使用mysql的 show processlist查看长时间运行的查询或阻塞的线程；==》  如果是死锁，mysql中，锁等待可通过data_lock_waits表查看；阻塞的sql，可以通过events_statements_current表查看；这两张表都存在于performance_schema数据库中,因此可以写个联表sql查看阻塞的sql：：
+
+```sql
+select request_e.sql_text wait_sql, w.blocking_thread_id, block_e.sql_text block_sql, block_t.processlist_host block_ip
+from performance_schema.data_lock_waits w
+join performance_schema.events_statements_current request_e on request_e.thread_id = w.requesting_thread_id
+join performance_schema.events_statements_current block_e on block_e.thread_id = w.blocking_thread_id
+join performance_schema.threads block_t on block_t.thread_id = w.blocking_thread_id;
+
+
+```
+
+==> 查找到 阻塞sql和主机ip ==》可以使用
+
+```linux
+sudo nmap -o -Pn ip
+```
+
+ 查看是主机信息；linux还是windows
 
 
 
