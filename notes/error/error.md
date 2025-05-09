@@ -357,6 +357,12 @@ sudo nmap -o -Pn ip
 
 
 
+##### 4.group by问题
+
+查询语句使用了group_concat或其他聚合函数，但没有使用group by 会生成一条空记录
+
+
+
 ### mybatis
 
 ##### 1.mybatis-plus版本冲突

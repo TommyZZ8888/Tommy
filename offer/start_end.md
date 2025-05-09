@@ -295,16 +295,6 @@ count(*)=count(1)>count(字段)
 
 
 
-##### 一条sql删除重复数据保留一条
-
-delete u1 from user u1 join user u2 on u1.name=u2.name where u1.id > u2.id
-
-##### 快速复制一张表
-
-insert into target_table select * from source_table
-
-
-
 ##### 2.避免索引失效：
 
 1.不使用or（or前后存在非索引字段，索引失效）
@@ -714,9 +704,37 @@ binlog每次事务提交写入，redolog事务过程中不断写入。当redolog
 
 
 
+##### 10.一条sql删除重复数据保留一条
+
+delete u1 from user u1 join user u2 on u1.name=u2.name where u1.id > u2.id
+
+##### 11.快速复制一张表
+
+insert into target_table select * from source_table
+
+select * into new_table from source_table
 
 
 
+##### 12.sql语句的优化
+
+所谓的`SQL`优化，就是指将一条`SQL`写的更加简洁，让`SQL`的执行速度更快，易读性与维护性更好。
+
+1.查询时尽量不要使用*
+
+2.连表查询时尽量不要关联太多表
+
+3.多表查询时一定要以小驱大
+
+4.不要使用like左模糊和全模糊查询
+
+5.查询时尽量不要对字段做空值判断
+
+6.不要在条件查询`=`前对字段做任何运算
+
+7.!=、!<>、not in、not like、or...要慎用
+
+8.必要情况下可以强制指定索引
 
 
 
