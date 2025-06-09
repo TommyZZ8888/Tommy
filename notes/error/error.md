@@ -258,6 +258,7 @@ spring默认给我们注入了一些转换器
                 //不加这句设置，返回结果类型会变成text/plain
                 response.getHeaders().add("Content-Type", "application/json");
                 try {
+                    // 这里
                     return objectMapper.writeValueAsString(ResponseResult.success(msg,data));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);

@@ -712,7 +712,8 @@ delete u1 from user u1 join user u2 on u1.name=u2.name where u1.id > u2.id
 
 insert into target_table select * from source_table
 
-select * into new_table from source_table
+CREATE TABLE new_table AS
+SELECT * FROM source_table
 
 
 
@@ -1485,6 +1486,16 @@ kafka2.8版本开始移除zookeeper：
 ${}字符串替换，对应的变量不会加上单引号，不能防止sql注入
 
 #{}占位符，对应的变量会加上单引号，可以防止sql注入
+
+
+
+### JUC
+
+
+
+
+
+
 
 
 
