@@ -739,6 +739,64 @@ SELECT * FROM source_table
 
 
 
+##### 13. 行转列，列传行
+
+参考：https://juejin.cn/post/7146492885708308487
+
+**行转列：**
+
+```sql
+SELECT
+	studentId as '学号',
+	SUM( CASE course WHEN '语文' THEN score ELSE 0 END ) AS '语文',
+	SUM( CASE course WHEN '数学' THEN score ELSE 0 END ) AS '数学',
+	SUM( CASE course WHEN '英语' THEN score ELSE 0 END ) AS '英语',
+	SUM( score ) AS '总分' 
+FROM
+	score 
+GROUP BY
+	studentId;
+	
+	SELECT
+	studentId AS '学号',
+	SUM( IF ( course = '语文', score, 0 ) ) AS '语文',
+	SUM( IF ( course = '数学', score, 0 ) ) AS '数学',
+	SUM( IF ( course = '英语', score, 0 ) ) AS '英语',
+	SUM( score ) AS '总分' 
+FROM
+	score 
+GROUP BY
+	studentId;
+```
+
+列不确定：
+
+```sql
+SET @EE='';
+select @EE :=CONCAT(@EE,'sum(if(subject= \'',subject,'\',score,0)) as ',subject, ',') AS aa FROM (SELECT DISTINCT subject FROM tb_score) A ;
+SET @QQ = CONCAT('select ifnull(userid,\'TOTAL\')as userid,',@EE,' sum(score) as TOTAL from tb_score group by userid WITH ROLLUP');
+-- SELECT @QQ;
+PREPARE stmt FROM @QQ;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+```
+
+
+
+**列转行：**
+
+```sql
+SELECT studentId,'语文' AS course,chineseScore AS score FROM score
+UNION ALL
+SELECT studentId,'数学' AS course,mathScore AS score FROM score
+UNION ALL
+SELECT studentId,'英语' AS course,englishScore AS score FROM score
+ORDER BY studentId
+```
+
+
+
 ### 微服务
 
 ##### 概念
@@ -1624,6 +1682,142 @@ spring事务就是通过aop切面技术，在合适的地方开启事务，接�
 （这是由于 Spring AOP 代理的原因造成的，因为只有当 @Transactional 注解的方法在类以外被调用的时候，Spring 事务管理才生效。
 
 另外，如果直接调用，不通过对象调用，也是会失效的。因为 Spring 事务是通过 AOP 实现的。）
+
+
+
+##### 过滤器与拦截器
+
+过滤器先执行，拦截器后执行。
+
+过滤器`Filter`是在请求进入容器后，但在进入`servlet`之前进行预处理，请求结束是在`servlet`处理完以后。
+
+拦截器 `Interceptor` 是在请求进入`servlet`后，在进入`Controller`之前进行预处理的，`Controller` 中渲染了对应的视图之后请求结束。
+
+执行顺序：==Filter 处理中` -> `Interceptor 前置` -> `我是controller` -> `Interceptor 处理中` -> `Interceptor 处理后==
+
+我们项目中使用过滤器，url匹配并调用其 `forward` 方法将请求转发到新的路径 `newServletPath`，不匹配的话将请求传递给链中的下一个过滤器或目标资源；
+
+使用拦截器做权限拦截；实现HandlerInterceptor
+
+```java
+@Order(1)
+@Configuration
+@WebFilter(filterName = "urlFilter", urlPatterns = "/api/*")
+public class UrlFilter implements Filter {
+
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String servletPath = httpServletRequest.getServletPath();
+        String prefix = "/api/" + applicationName;
+        if (StringUtils.isNotBlank(servletPath) && servletPath.startsWith(prefix)) {
+            String newServletPath = servletPath.substring(prefix.length());
+            request.getRequestDispatcher(newServletPath).forward(request, response);
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        Filter.super.init(filterConfig);
+    }
+
+    @Override
+    public void destroy() {
+        Filter.super.destroy();
+    }
+}
+```
+
+|                    | 过滤器                                                       | 拦截器                                                       |
+| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 出身不同           | 过滤器来自于 Servlet                                         | 基于springmvc                                                |
+| 触发时机不同       | 过滤器会先执行                                               | 然后才会执行拦截器                                           |
+| 实现不同           | 基于方法回调实现的                                           | 基于动态代理（底层是反射）实现的                             |
+| 使用的场景不同     | **拦截器主要用来实现项目中的业务判断的**，比如：登录判断、权限判断、日志记录 | **过滤器通常是用来实现通用功能过滤的**，比如：敏感词过滤、字符集编码设置、响应数据压缩等功能 |
+| 支持的项目类型不同 | 过滤器要依赖 Servlet 容器，它只能用在 Web 项目中             | 拦截器是 Spring 中的一个组件，因此拦截器既可以用在 Web 项目中，同时还可以用在 Application 或 Swing 程序中 |
+
+
+
+##### 三级缓存
+
+**只有二级缓存时的问题**
+
+**二级缓存工作流程**
+
+1. **开始创建ServiceA**
+   - 实例化ServiceA（原始对象）
+   - 将原始ServiceA放入二级缓存
+   - 开始填充ServiceA的属性
+2. **发现需要ServiceB**
+   - 开始创建ServiceB
+   - 实例化ServiceB
+   - 开始填充ServiceB的属性
+3. **ServiceB需要ServiceA**
+   - 从二级缓存获取ServiceA的原始对象
+   - 将原始对象注入到ServiceB中
+4. **继续完成ServiceA的创建**
+   - ServiceB创建完成，注入到ServiceA
+   - 对ServiceA应用AOP代理，生成代理对象
+   - 将代理对象放入一级缓存
+
+**问题出现**
+
+**此时系统中存在**：
+
+- ServiceB中持有的是ServiceA的**原始对象**
+- 容器中最终保存的是ServiceA的**代理对象**
+
+**结果**：ServiceB实际使用的是未经AOP增强的原始ServiceA，而不是预期的代理对象，导致事务等AOP功能失效。
+
+**三级缓存如何解决这个问题**
+
+**三级缓存工作流程**
+
+1. **开始创建ServiceA**
+
+   - 实例化ServiceA（原始对象）
+
+   - 将ServiceA的ObjectFactory放入三级缓存
+
+     ```
+     addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, bean));
+     ```
+
+   - 开始填充ServiceA的属性
+
+2. **发现需要ServiceB**
+
+   - 开始创建ServiceB
+   - 实例化ServiceB
+   - 开始填充ServiceB的属性
+
+3. **ServiceB需要ServiceA**
+
+   - 从三级缓存获取ObjectFactory
+   - 执行ObjectFactory.getEarlyBeanReference()：
+     - 如果需要AOP代理，此时生成代理对象
+     - 否则返回原始对象
+   - 将生成的代理对象放入二级缓存
+   - 将这个早期引用（可能是代理对象）注入ServiceB
+
+4. **继续完成ServiceA的创建**
+
+   - ServiceB创建完成，注入到ServiceA
+   - 如果ServiceA已经被代理过（在getEarlyBeanReference阶段），则直接使用
+   - 最终对象放入一级缓存
+
+关键区别
+
+- **二级缓存**：过早暴露原始对象，无法处理后续的AOP代理需求
+- **三级缓存**：
+  - 通过ObjectFactory延迟决定是否需要创建代理
+  - 保证所有依赖注入点获取到的都是同一个对象（原始对象或代理对象）
+  - 通过`getEarlyBeanReference`统一处理代理逻辑
 
 
 
