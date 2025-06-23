@@ -235,17 +235,16 @@ class Ticket {
 
 - 缺点：你们可能也发现了，这样可能导致队列中间的线程一直获取不到锁或者长时间获取不到锁，导致饿死。
 
+  
+  
+  ```java
   import java.util.concurrent.locks.Lock;
   import java.util.concurrent.locks.ReentrantLock;
-
+  
   public class LockDemo {
   public static void main(String[] args) {
   final Ticket2 ticket = new Ticket2();
-
-  
-
-  ```java
-        new Thread(() -> {
+  new Thread(() -> {
             for (int i = 0; i < 40; i++) {
                 ticket.sale();
             }
@@ -261,20 +260,20 @@ class Ticket {
             }
         }, "C").start();
     }
-  ```
-
   }
+  
+  ```
+  
+  
+  
+  ```java
   //lock三部曲
   //1、 Lock lock=new ReentrantLock();
   //2、 lock.lock() 加锁
   //3、 finally=> 解锁：lock.unlock();
   class Ticket2 {
   private int number = 30;
-
-  
-
-  ```java
-    // 创建锁
+  // 创建锁
     Lock lock = new ReentrantLock();
     //卖票的方式
     public synchronized void sale() {
@@ -287,10 +286,11 @@ class Ticket {
             lock.unlock(); // 关闭锁
         }
   
-    }
+    }}
+      
   ```
 
-  }
+  
 
 ## Synchronized 与Lock 的区别
 
@@ -2308,7 +2308,7 @@ Hotspot 有两种对象头：
 
 ##### 1、java内存模型的基础
 
-   ![image-20230303161134619](D:\test\items\Tommy\notes\img\juc\juc\jmm.png)
+   ![image-20230303161134619](..\.\notes\img\juc\juc\jmm.png)
 
 线程之间的共享变量存储在主内存，每个线程都有个本地内存，本地内存存储着该线程读写共享变量的副本，本地内存是JMM的一个抽象概念，并不真实存在。
 
@@ -2316,7 +2316,7 @@ Hotspot 有两种对象头：
 
 ##### 2、**指令重排序**
 
-![image-20230303161549418](D:\test\items\Tommy\notes\img\juc\juc\指令重排序.png)
+![image-20230303161549418](..\..\notes\img\juc\juc\指令重排序.png)
 
 1属于编译器重排序，2和3属于处理器重排序，这些重排序可能会导致多线程程序出现内存可见性问题。对于编译器，JMM的编译器重排序规则会禁止特定类型的编译器重排序。对于处理器重排序，JMM的处理器重排序规则会要求在生成指令序列时，插入特定类型的内存屏障。
 

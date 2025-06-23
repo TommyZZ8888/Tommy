@@ -148,16 +148,6 @@ ArrayList
 总结
 HashMap和ArrayList都是集合类，但是他们的存储结构有所不同，存储的方式也有所不同，假如我们有一个表单页面要显示所有的订单，我们可以使用ArrayList存储然后循环显示在页面上。假如我们要存储一个人的基本信息，可以用HashMap存储 key=“name”，value=“张三”，key=“password”，value=”123456“，这种的参数，所以我们在开发过程中根据实际情况来决定使用哪一种。
 
-### 9.理解数据库索引原理和innodb特点
-
-冒泡排序，二分查找，二叉树三种遍历
-
-
-
-
-
-
-
 
 
 ### HashMap
@@ -407,7 +397,7 @@ HashMap的底层是一个数组结构，数组中的每一项对应了一个链�
 
 ### 1. equals与==的区别
 
-![图片](..\notes\img\offer\650.png)**==**
+![图片](..\..\notes\img\offer\650.png)**==**
 
 - 如果是基本类型，==表示判断它们值是否相等；
 - 如果是引用对象，==表示判断两个对象指向的内存地址是否相同。
@@ -415,8 +405,19 @@ HashMap的底层是一个数组结构，数组中的每一项对应了一个链�
 **equals**
 
 - 如果是字符串，表示判断字符串内容是否相同；
+
 - 如果是object对象的方法，比较的也是引用的内存地址值；
+
 - 如果自己的类重写equals方法，可以自定义两个对象是否相等。
+
+  
+
+  **为什么重写equal方法，必须重写hashcode方法：**
+
+  如果只重写了 equals 方法，那么默认情况下，Set 进行去重操作时，会先判断两个对象的 hashCode 是否相同，此时因为没有重写 hashCode 方法，所以会直接执行 Object 中的 hashCode 方法，而 Object 中的 hashCode 方法对比的是两个不同引用地址的对象，所以结果是 false，那么 equals 方法就不用执行了，直接返回的结果就是 false：两个对象不是相等的，于是就在 Set 集合中插入了两个相同的对象。
+  ​
+
+  但是，如果在重写 equals 方法时，也重写了 hashCode 方法，那么在执行判断时会去执行重写的 hashCode 方法，此时对比的是两个对象的所有属性的 hashCode 是否相同，于是调用 hashCode 返回的结果就是 true，再去调用 equals 方法，发现两个对象确实是相等的，于是就返回 true 了，因此 Set 集合就不会存储两个一模一样的数据了，于是整个程序的执行就正常了。
 
 ### 2. final, finally, finalize 的区别
 
@@ -839,7 +840,7 @@ System.out.println(strIso);
 
 ### 24. 谈谈Java的异常层次结构
 
-![图片](..\notes\img\offer\651.png)
+![图片](..\..\notes\img\offer\651.png)
 
 从前从前，有位老人，他的名字叫**Throwable**，他生了两个儿子，大儿子叫**Error**,二儿子叫**Exception**。
 
@@ -893,7 +894,7 @@ String str ="whx";String newStr =new String ("whx");
 
 如图所示：
 
-![图片](..\notes\img\offer\652.png)
+![图片](..\..\notes\img\offer\652.png)
 
 网上这篇文章讲的挺好的：String和New String()的区别
 
@@ -901,9 +902,9 @@ String str ="whx";String newStr =new String ("whx");
 
 Class.forName和ClassLoader都可以对类进行加载。它们区别在哪里呢？**ClassLoader**负责加载 Java 类的字节代码到 Java 虚拟机中。Class.forName其实是调用了ClassLoader，如下：
 
-![图片](..\notes\img\offer\640.png)这里面，forName0的第二个参数为true，表示对加载的类进行初始化化。其实还可以调用 `Class<?>forName(Stringname,booleaninitialize,ClassLoaderloader)`方法实现一样的功能，它的源码如下：
+![图片](..\..\notes\img\offer\640.png)这里面，forName0的第二个参数为true，表示对加载的类进行初始化化。其实还可以调用 `Class<?>forName(Stringname,booleaninitialize,ClassLoaderloader)`方法实现一样的功能，它的源码如下：
 
-![图片](..\notes\img\offer\641.png)
+![图片](..\..\notes\img\offer\641.png)
 
 所以，Class.forName和ClassLoader的区别，就是在类加载的时候，class.forName有参数控制是否对类进行初始化。
 
@@ -916,7 +917,7 @@ Class.forName和ClassLoader都可以对类进行加载。它们区别在哪里�
 
 ### 29. error和exception的区别，CheckedException，RuntimeException的区别。
 
-![图片](..\notes\img\offer\642.png)
+![图片](..\..\notes\img\offer\642.png)
 
 **Error:** 表示编译时或者系统错误，如虚拟机相关的错误，OutOfMemoryError等，error是无法处理的。
 
@@ -940,13 +941,13 @@ Class.forName和ClassLoader都可以对类进行加载。它们区别在哪里�
 
 **浅拷贝**
 
-复制了对象的引用地址，两个对象指向同一个内存地址，所以修改其中任意的值，另一个值都会随之变化。![图片](..\notes\img\offer\643.png)
+复制了对象的引用地址，两个对象指向同一个内存地址，所以修改其中任意的值，另一个值都会随之变化。![图片](..\..\notes\img\offer\643.png)
 
 **深拷贝**
 
 将对象及值复制过来，两个对象修改其中任意的值另一个值不会改变
 
-![图片](..\notes\img\offer\644.png)
+![图片](..\..\notes\img\offer\644.png)
 
 ### 31. JDK 和 JRE 有什么区别？
 
@@ -1098,7 +1099,7 @@ char ch = '啦';System.out.println("char:" + ch);
 
 ### 49. 访问修饰符public,private,protected,以及default的区别？
 
-![图片](..\notes\img\offer\645.png)
+![图片](..\..\notes\img\offer\645.png)
 
 ### 50. 谈谈final在java中的作用？
 
@@ -1108,7 +1109,7 @@ char ch = '啦';System.out.println("char:" + ch);
 
 ### 51. java中的Math.round(-1.5) 等于多少呢？
 
-![图片](..\notes\img\offer\646.png)
+![图片](..\..\notes\img\offer\646.png)
 
 JDK 中的 java.lang.Math 类:
 
@@ -1125,7 +1126,7 @@ String 不属于基础类型，基础类型有 8 种：byte、boolean、char、s
 - 使用 StringBuilder 或 StringBuffer 的 reverse 方法，本质都调用了它们的父类 AbstractStringBuilder 的 reverse 方法实现。（JDK1.8）
 - 使用chatAt函数，倒过来输出；
 
-![图片](..\notes\img\offer\647.png)
+![图片](..\..\notes\img\offer\647.png)
 
 ### 54. 描述动态代理的几种实现方式，它们分别有什么优缺点
 
@@ -1154,7 +1155,7 @@ Java 泛型（generics）是 JDK 5 中引入的一个新特性，其本质是参
 ### 58. 什么是序列化，怎么序列化，反序列呢？
 
 - 序列化：把Java对象转换为字节序列的过程
-- 反序列：把字节序列恢复为Java对象的过程 ![图片](..\notes\img\offer\648.png)
+- 反序列：把字节序列恢复为Java对象的过程 ![图片](..\..\notes\img\offer\648.png)
 
 可以看我这篇文章哈~ [Java程序员必备：序列化全方位解析](http://mp.weixin.qq.com/s?__biz=MzIwOTE2MzU4NA==&mid=2247484021&idx=1&sn=d7760254bd36f3a39dc8705ad40b469f&chksm=9779465aa00ecf4cfb5513a0ac41a31f318df2565b3e4ac739e62abfedad21d5a1e483f63f63&scene=21#wechat_redirect)
 
@@ -1214,7 +1215,7 @@ try-catch-finally-return 执行描述:
 
 看一个例子
 
-```
+```go
  public static void main(String[] args) throws IOException {        System.out.println("result：" + test());    }
     private static int test() {        int temp = 1;        try {            System.out.println("start execute try,temp is:"+temp);            return ++temp;        } catch (Exception e) {            System.out.println("start execute catch temp is: "+temp);            return ++temp;        } finally {            System.out.println("start execute finally,temp is:" + temp);            ++temp;        }    }
 ```
@@ -1361,8 +1362,6 @@ public class Test {    public static void main(String[] args)  {        int a =1
 - 异步，执行完函数或方法后，不必阻塞性地等待返回值或消息，只需要向系统委托一个异步过程，那么当系统接收到返回值或消息时，系统会自动触发委托的异步过程，从而完成一个完整的流程。
 - 同步，就是实时处理（如打电话）
 - 异步，就是分时处理（如收发短信）
-
-参考这篇文章~ 同步和异步的区别
 
 ### 79. 实际开发中，Java一般使用什么数据类型来代表价格？
 
@@ -1809,7 +1808,7 @@ SqlSessionFactory对象实例化，加上transactional事务管理，创建Execu
 创建SqlSession，通过SqlSession实现增删改查。
 增删改查执行成功时，则提交事务，关闭。
 增删改查执行失败时，则回滚事务。
-![img](..\notes\img\offer\649.png)
+![img](..\..\notes\img\offer\649.png)
 程序执行时，SqlSessionFactoryBuider读取mybatis的配置文件流，构建SqlSessionFactory对象。
 通过SqlSessionFactory对象生产SqlSession对象。
 SqlSession第一种方式是先获取mapper，通过mapper再去执行方法。
@@ -1864,7 +1863,7 @@ mybatis默认定义了两级缓存：一级缓存和二级缓存。
 如果二级缓存中没有，再去查询一级缓存中有没有，如果有则返回数据。
 如果两个缓存中都没有，则去查询数据库。
 查询数据库得到的信息会先存放在一级缓存中，当sqlsession提交或者关闭时，再把一级缓存中的数据提交到二级缓存中。
-![img](..\notes\img\offer\kuangstudy4cd68f83-743d-41b8-ab64-89fb95133d39.jpg)
+![img](..\..\notes\img\offer\kuangstudy4cd68f83-743d-41b8-ab64-89fb95133d39.jpg)
 
 ## mybatis如何进行分页
 
@@ -1939,7 +1938,7 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 1. SimpleExecutor执行器：每执行一次update或select，就开启一个statement对象，用完就立即关闭statement对象。
 2. ReuseExecutor执行器：执行update或select，以sql作为key查找statement对象，存在就使用，不存在就创建，用完后不关闭statement，而是放在map中。
 3. BatchExecutor执行器：完成批处理。
-   ![img](..\notes\img\offer\kuangstudy99848a54-3986-4053-8646-bbbc580b620d.jpg)
+   ![img](..\..\notes\img\offer\kuangstudy99848a54-3986-4053-8646-bbbc580b620d.jpg)
    ![img](https://kuangstudy.oss-cn-beijing.aliyuncs.com/bbs/2022/01/20/kuangstudyb7f6469b-0f71-4096-a89b-99a25c7c917b.jpg)
 
 
@@ -1969,7 +1968,7 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 4. repeatable_read：可重复读。禁止脏读、不可重复读
 5. serilizable：串行化。禁止脏读、不可重复读、幻读；但是性能低下
 
-![img](..\notes\img\offer\kuangstudy384d07bf-91f8-446c-9dbb-0ea40f8e831c.jpg)
+![img](..\..\notes\img\offer\kuangstudy384d07bf-91f8-446c-9dbb-0ea40f8e831c.jpg)
 
 #### 4.MySQL使用的是哪个隔离级别
 
@@ -2034,7 +2033,7 @@ A方法调用B方法：A是当前，B是自己
 
 #### 7.InnoDB与MyISAM的区别
 
-![img](..\notes\img\offer\kuangstudy83e926e0-a1b1-4209-b734-f8652beb0db9.jpg)
+![img](..\..\notes\img\offer\kuangstudy83e926e0-a1b1-4209-b734-f8652beb0db9.jpg)
 
 #### 8.SQL优化的几种方式
 
@@ -2307,7 +2306,7 @@ AOP可以对某个对象或某些对象的功能进行增强，比如对象中�
 - 最终通知：在目标方法执行之后执行（目标方法抛出异常也执行）
 
 常见使用场景
-![img](..\notes\img\offer\kuangstudyeab0bc55-cac1-4d89-b951-8e49be410cf5.jpg)
+![img](..\..\notes\img\offer\kuangstudyeab0bc55-cac1-4d89-b951-8e49be410cf5.jpg)
 
 #### 11.五种通知执行的顺序
 
@@ -2369,7 +2368,7 @@ spring的循环依赖只支持单例，为什么只支持单例？
 为什么不直接缓存X，而是缓存一个X对象所对应的ObjectFactory？
 如果我们直接缓存X，那么拿出来的就是一个X对象，程序员很难进行扩展；如果我们缓存的是一个ObjectFactory，spring内部可以通过BeanPostProcessor接口，能够对ObjectFactory在产生X这个过程当中，程序员还是可以进行干预，扩展，得到一个自己想要的X对象。
 
-![img](..\notes\img\offer\kuangstudyd56f4aa5-a119-46f5-bcfc-74565a7dbab0.jpg)
+![img](..\..\notes\img\offer\kuangstudyd56f4aa5-a119-46f5-bcfc-74565a7dbab0.jpg)
 
 #### BeanFactory和ApplicationContext有什么区别？
 
@@ -2446,13 +2445,13 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
 #### 4.springMVC常用的注解
 
-[@RequestMapping](https://github.com/RequestMapping)：用于处理请求url映射的注解，可用于类或方法上。
-[@RequestBody](https://github.com/RequestBody)：实现接收http请求的json数据，把json转换为java对象。
-[@ResponseBody](https://github.com/ResponseBody)：将controller方法返回对象转化为json响应给客户。
-[@RequestParam](https://github.com/RequestParam)：将请求参数绑定到控制器的方法的参数上。
-[@PathVariable](https://github.com/PathVariable)：用于绑定url中的占位符。spring3.0以后支持；springmvc支持rest风格url的重要的标志。/user/{id}
-[@Controller](https://github.com/Controller)：标记可以被spring扫描，注册到上下文中的bean
-[@RestController](https://github.com/RestController)：相当于[@ResponseBody](https://github.com/ResponseBody)+[@Controller](https://github.com/Controller)
+@RequestMapping：用于处理请求url映射的注解，可用于类或方法上。
+@RequestBody：实现接收http请求的json数据，把json转换为java对象。
+@ResponseBody：将controller方法返回对象转化为json响应给客户。
+@RequestParam：将请求参数绑定到控制器的方法的参数上。
+@PathVariable：用于绑定url中的占位符。spring3.0以后支持；springmvc支持rest风格url的重要的标志。/user/{id}
+@Controller：标记可以被spring扫描，注册到上下文中的bean
+@RestController：相当于@ResponseBody+@Controller
 
 #### 5.SpringMVC怎么设定重定向和转发的
 
@@ -2531,7 +2530,7 @@ https://www.kuangstudy.com/bbs/1377253872002789377#header18
 
 - Spring Boot只是承载者，辅助你==简化项目搭建过程==的。如果承载的是WEB项目，使用Spring MVC作为MVC框架，那么工作流程和你上面描述的是完全一样的，因为这部分工作是Spring MVC做的而不是Spring Boot。
 
-- 对使用者来说，换用Spring Boot以后，项目初始化方法变了，配置文件变了，另外就是不需要单独安装Tomcat这类容器服务器了，maven打出jar包直接跑起来就是个网站，但你最核心的业务逻辑实现与业务流程实现没有任何变化。
+- 对使用者来说，换用Spring Boot以后，项目初始化方法变了，配置文件变了，另外就是不需要单独安装Tomcat这类容器服务器了，maven打出jar包直接跑起来就是个网站，但你最核心的业务8逻辑实现与业务流程实现没有任何变化。
 
 - **所以，用最简练的语言概括就是：**
 
@@ -2864,7 +2863,7 @@ ps：SpringBoot的自动配置我觉得是SpringBoot很重要的“特性”了�
 
 
 
-![img](D:\test\items\Tommy\notes\img\offer\offer-springboot01.webp)
+![img](..\..\notes\img\offer\offer-springboot01.webp)
 
 
 
@@ -2872,7 +2871,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
 
 
-![img](D:\test\items\Tommy\notes\img\offer\offer-springboot02.webp)
+![img](..\..\\notes\img\offer\offer-springboot02.webp)
 
 
 
@@ -2882,7 +2881,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
 
 
-![img](D:\test\items\Tommy\notes\img\offer\offer-springboot03.webp)
+![img](..\..\\notes\img\offer\offer-springboot03.webp)
 
 
 
@@ -2900,7 +2899,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
 
 
-![img](D:\test\items\Tommy\notes\img\offer\offer-springboot04.webp)
+![img](..\..\\notes\img\offer\offer-springboot04.webp)
 
 
 
@@ -2928,25 +2927,12 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 - 支持数组，数组中的元素可以是基本数据类型也可以是对象
 - 简洁明了
 
-#### 6.Spring Boot 中如何解决跨域问题 ?
-
-1. 通过 CORS 来解决跨域问题，实现WebMvcConfigurer接口然后重写addCorsMappings方法解决跨域问题
-
-```
-@Configurationpublic class CorsConfig implements WebMvcConfigurer {    @Override    public void addCorsMappings(CorsRegistry registry) {        registry.addMapping("/**")                .allowedOrigins("*")                .allowCredentials(true)                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")                .maxAge(3600);    }}
-```
-
-#### 7.Spring Boot 打成的 jar 和普通的 jar 有什么区别 ?
-
-1. Spring Boot 项目最终打包成的 jar 是可执行 jar ，这种 jar 可以直接通过 java -jar xxx.jar 命令来运行，这种 jar 不可以作为普通的 jar 被其他项目依赖，即使依赖了也无法使用其中的类
-2. Spring Boot 的 jar 无法被其他项目依赖，主要还是他和普通 jar 的结构不同。普通的 jar  包，解压后直接就是包名，包里就是我们的代码，而 Spring Boot 打包成的可执行 jar 解压后，在 \BOOT-INF\classes  目录下才是我们的代码，因此无法被直接引用。如果非要引用，可以在 pom.xml 文件中增加配置，将 Spring Boot 项目打包成两个  jar ，一个可执行，一个可引用
-
-#### 8.Spring Boot 中如何实现定时任务 ?
+#### 6.Spring Boot 中如何实现定时任务 ?
 
 1. 首先在启动类上加上注解 [@EnableScheduling](https://github.com/EnableScheduling)
 2. 在你想要定时执行的方法上加cron表达式著名
 
-#### 9.Springboot有几个配置文件
+#### 7.Springboot有几个配置文件
 
 ###### **一、springboot主要配置文件种类**
 
@@ -3115,6 +3101,8 @@ Swagger 广泛用于可视化 API，使用 Swagger UI 为前端开发人员提�
 
 Spring提供了一种使用ControllerAdvice处理异常的非常有用的方法。通过实现一个ControlerAdvice类，来处理控制类抛出的所有异常。
 
+类中定义方法加上@MethonHandler
+
 ##### 17、什么是FreeMarker模板？
 
 FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软件架构进行动态网页生成。使用 Freemarker  的主要优点是表示层和业务层的完全分离。程序员可以处理应用程序代码，而设计人员可以处理 html 页面设计。最后使用freemarker  可以将这些结合起来，给出最终的输出页面。
@@ -3138,7 +3126,7 @@ FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软�
 跨域可以在前端通过JSONP来解决，但是JSONP只可以发送GET请求，无法发送其他类型的请求，在RESTful风格的应用中，就显得非常鸡肋，因此推荐在后端通过（CORS，Cross-origin resource sharing）来解决跨域问题。这种解决方案并非Spring  Boot特有的，在传统的SSM框架中，就可以通过CORS来解决跨域问题，只不过之前我们是在XML文件中配置CORS，现在可以通过实现WebMvcConfigurer接口然后重写addCorsMappings方法解决跨域问题。
 
 ```
-@Configurationpublic class CorsConfig implements WebMvcConfigurer {    @Override    public void addCorsMappings(CorsRegistry registry) {        registry.addMapping("/**")                .allowedOrigins("*")                .allowCredentials(true)                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")                .maxAge(3600);    }}1234567891011121314
+@Configurationpublic class CorsConfig implements WebMvcConfigurer {    @Override    public void addCorsMappings(CorsRegistry registry) {        registry.addMapping("/**")                .allowedOrigins("*")                .allowCredentials(true)                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")                .maxAge(3600);    }}
 ```
 
 项目中前后端分离部署，所以需要解决跨域的问题。
@@ -3146,8 +3134,8 @@ FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软�
 当用户登录以后，正常使用；当用户退出登录状态时或者token过期时，由于拦截器和跨域的顺序有问题，出现了跨域的现象。
 我们知道`一个http请求，先走filter，到达servlet后才进行拦截器的处理`，如果我们把cors放在filter里，就可以优先于权限拦截器执行。
 
-```
-@Configurationpublic class CorsConfig {    @Bean    public CorsFilter corsFilter() {        CorsConfiguration corsConfiguration = new CorsConfiguration();        corsConfiguration.addAllowedOrigin("*");        corsConfiguration.addAllowedHeader("*");        corsConfiguration.addAllowedMethod("*");        corsConfiguration.setAllowCredentials(true);        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);        return new CorsFilter(urlBasedCorsConfigurationSource);    }}12345678910111213141516
+```go
+@Configurationpublic class CorsConfig {    @Bean    public CorsFilter corsFilter() {        CorsConfiguration corsConfiguration = new CorsConfiguration();        corsConfiguration.addAllowedOrigin("*");        corsConfiguration.addAllowedHeader("*");        corsConfiguration.addAllowedMethod("*");        corsConfiguration.setAllowCredentials(true);        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);        return new CorsFilter(urlBasedCorsConfigurationSource);    }}
 ```
 
 ##### 21、什么是CSRF攻击？
