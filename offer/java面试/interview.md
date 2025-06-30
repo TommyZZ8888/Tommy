@@ -1379,7 +1379,7 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
 
 ### ==81.springcloud==
 
-#### 1.1 什么是微服务？
+### 1.1 什么是微服务？
 
 微服务(Microservice Architecture) 是近几年流行的一种架构思想，关于它的概念很难一言以蔽之。
 
@@ -1398,7 +1398,7 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
 
 
 
-####  1.2 微服务之间是如何独立通讯的？
+###  1.2 微服务之间是如何独立通讯的？
 
 ```
 同步：RPC ,REST等。
@@ -1422,7 +1422,7 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
        缺点:
        消息中间件有额外的复杂
 
-####  1.3 SpringCloud 和 Dubbo有那些区别？
+###  1.3 SpringCloud 和 Dubbo有那些区别？
 
 **最大区别：Spring Cloud 抛弃了Dubbo的RPC通信，采用的是基于HTTP的REST方式**
 
@@ -1434,14 +1434,14 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
 
 **总结：**二者解决的问题域不一样：Dubbo的定位是一款RPC框架，而SpringCloud的目标是微服务架构下的一站式解决方案。
 
-####  1.4 SpringBoot 和 SpringCloud，请谈谈你对他们的理解
+###  1.4 SpringBoot 和 SpringCloud，请谈谈你对他们的理解
 
 - SpringBoot专注于开苏方便的开发单个个体微服务；
 - SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务，整合并管理起来，为各个微服务之间提供：配置管理、服务发现、断路器、路由、为代理、事件总栈、全局锁、决策竞选、分布式会话等等集成服务；
 - SpringBoot可以离开SpringCloud独立使用，开发项目，但SpringCloud离不开SpringBoot，属于依赖关系；
 - SpringBoot专注于快速、方便的开发单个个体微服务，SpringCloud关注全局的服务治理框架；
 
-####  1.5 什么是服务熔断？什么是服务降级？
+###  1.5 什么是服务熔断？什么是服务降级？
 
 **熔断机制是赌赢雪崩效应的一种微服务链路保护机制**。
 
@@ -1460,7 +1460,7 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
 
 降级的方式可以根据业务来，可以延迟服务，比如延迟给用户增加积分，只是放到一个缓存中，等服务平稳之后再执行 ；或者在粒度范围内关闭服务，比如关闭相关文章的推荐。
 
-####  1.6 微服务的优缺点分别是什么？说下你在项目开发中遇到的坑
+###  1.6 微服务的优缺点分别是什么？说下你在项目开发中遇到的坑
 
 > 优点
 
@@ -1486,7 +1486,7 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
 - 系统集成测试问题；
 - 性能和监控问题；
 
-####  1.7 你所知道的微服务技术栈有哪些？列举一二
+###  1.7 你所知道的微服务技术栈有哪些？列举一二
 
  维度(SpringCloud)
      服务开发
@@ -1514,13 +1514,13 @@ int数据类型占4个字节 32位，跟JVM位数没关系的
      事件消息总线
        SpringCloud Bus
 
-####  1.8 Eureka和Zookeeper都可以提供服务注册与发现的功能，请说说两者的区别
+###  1.8 Eureka和Zookeeper都可以提供服务注册与发现的功能，请说说两者的区别
 
 
 
 zookeeper与dubbo区别
 
-#### zookeeper与eurake区别
+### zookeeper与eurake区别
 
 著名的CAP理论指出，一个分布式系统不可能同时满足C (一致性) 、A (可用性) 、P (容错性)，由于分区容错性P再分布式系统中是必须要保证的，因此我们只能再A和C之间进行权衡。
 
@@ -1547,12 +1547,12 @@ http与rpc区别
 
 
 
-#### 1.SpringBoot和SpringCloud的区别？
+### 1.SpringBoot和SpringCloud的区别？
 
 1. SpringBoot专注于快速方便的开发单个个体微服务
 2. SpringCloud是关注全局的微服务协调整理治理框架，它将SpringBoot开发的一个个单体微服务整合并管理起来，为各个微服务之间提供，配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等集成服务,SpringBoot可以离开SpringCloud独立使用开发项目， 但是SpringCloud离不开SpringBoot  ，属于依赖的关系,SpringBoot专注于快速、方便的开发单个微服务个体，SpringCloud关注全局的服务治理框架。
 
-#### 2.使用 Spring Boot 开发分布式微服务时，我们面临以下问题
+### 2.使用 Spring Boot 开发分布式微服务时，我们面临以下问题
 
 1. 与分布式系统相关的复杂性-这种开销包括网络问题，延迟开销，带宽问题，安全问题
 2. 服务发现-服务发现工具管理群集中的流程和服务如何查找和互相交谈。它涉及一个服务目录，在该目录中注册服务，然后能够查找并连接到该目录中的服务
@@ -1561,7 +1561,7 @@ http与rpc区别
 5. 性能-问题 由于各种运营开销导致的性能问题。
 6. 部署复杂性-Devops 技能的要求。
 
-#### 3.服务注册和发现是什么意思？Spring Cloud 如何实现？
+### 3.服务注册和发现是什么意思？Spring Cloud 如何实现？
 
 1. 当我们开始一个项目时，我们通常在属性文件中进行所有的配置。随着越来越多的服务开发和部署，添加和修改这些属性变得更加复杂.有些服务可能会下降，而某些位置可能会发生变化。手动更改属性可能会产生问题。
 
@@ -1573,7 +1573,7 @@ http与rpc区别
 
 1. Eureka 服务注册和发现可以在这种情况下提供帮助。由于所有服务都在 Eureka 服务器上注册并通过调用 Eureka 服务器完成查找，因此无需处理服务地点的任何更改和处理
 
-#### 4.springcloud有哪些组件？springcloud核心组件及其作用? ======+1
+### 4.springcloud有哪些组件？springcloud核心组件及其作用? ======+1
 
 1. springcloud组件：
 
@@ -1596,13 +1596,13 @@ http与rpc区别
 - Hystrix: 发起的请求是通过Hystrix的线程池来走,不同的服走不同的线程池,实现了不同的服务调度隔离,避免服务雪崩的问题
 - zull: 如果前端后端移动端调用后台系统,统一走zull网关进入,有zull网关转发请求给对应的服务
 
-#### 5.Spring Cloud 和dubbo区别?======被问+1
+### 5.Spring Cloud 和dubbo区别?======被问+1
 
 1. 服务调用方式 dubbo是RPC springcloud Rest Api
 2. 注册中心,dubbo 是zookeeper springcloud是eureka，也可以是zookeeper
 3. 服务网关,dubbo本身没有实现，只能通过其他第三方技术整合，springcloud有Zuul路由网关，作为路由服务器，进行消费者的请求分发,springcloud支持断路器，与git完美集成配置文件支持版本控制，事物总线实现配置文件的更新与服务自动装配等等一系列的微服务架构要素
 
-#### 6.什么是负载均衡以及负载均衡有哪几种策略？负载均衡的意义什么？
+### 6.什么是负载均衡以及负载均衡有哪几种策略？负载均衡的意义什么？
 
 1. 负载均衡简单的说就是将用户的请求平摊的分配到多个服务上，从而达到系统的HA (高用)
 2. 负载均衡的策略：
@@ -1622,28 +1622,28 @@ http与rpc区别
 
 1. 在计算中，负载均衡可以改善跨计算机，计算机集群，网络链接，中央处理单元或磁盘驱动器等多种计算资源的工作负载分布。负载均衡旨在优化资源使用，最大化吞吐量，最小化响应时间并避免任何单一资源的过载。使用多个组件进行负载均衡而不是单个组件可能会通过冗余来提高可靠性和可用性。负载均衡通常涉及专用软件或硬件，例如多层交换机或域名系统服务器进程
 
-#### 7.什么是 Hystrix？它如何实现容错？
+### 7.什么是 Hystrix？它如何实现容错？
 
 1. Hystrix是一个应用于处理分布式系统的延迟和容错的开源库，在分布式系统里，许多依赖不可避免的会调用失败，比如超时，异常等。Hystrix 能够保证在一个依赖出问题的情况下，不会导致整个体系服务失败，避免级联故障，以提高分布式系统的弹性
 2. 如何实现容错！[可以查看文章，后面的问题也可以查看](https://thinkwon.blog.csdn.net/article/details/104397367)
 
 PS：因为目前面试遇到的问题基本没有springcloud方面的，所以该文章主要是收集上面文章的内容，目的就是统一，方便我背面试题！后续面试到的题我会加上去的！比如第四题和第五题被问到过，第五题这个上面的文章有，第四题没有，但是熟springcloud的都知道这个问题不背也肯定会
 
-#### 8.什么是 Hystrix 断路器？
+### 8.什么是 Hystrix 断路器？
 
 1. Hystrix“断路器”本身是一种开关装置，当某个服务单元发生故障之后，通过断路器的故障监控 (类似熔断保险丝)  ，向调用方返回一个服务预期的，可处理的备选响应 (FallBack)  ，而不是长时间的等待或者抛出调用方法无法处理的异常，这样就可以保证了服务调用方的线程不会被长时间。不必要的占用，从而避免了故障在分布式系统中的蔓延，乃至雪崩。
 
-#### 9.什么是服务熔断？
+### 9.什么是服务熔断？
 
 1. 熔断机制是赌赢雪崩效应的一种微服务链路保护机制。
 2. 当扇出链路的某个微服务不可用或者响应时间太长时，会进行服务的降级，进而熔断该节点微服务的调用，快速返回错误的响应信息。检测到该节点微服务调用响应正常后恢复调用链路。在SpringCloud框架里熔断机制通过Hystrix实现。Hystrix会监控微服务间调用的状况，当失败的调用到一定阀值缺省是5秒内20次调用失败，就会启动熔断机制。熔断机制的注解是：@ HystrixCommand
 
-#### 10.什么是服务降级？服务降级主要用于什么场景呢？
+### 10.什么是服务降级？服务降级主要用于什么场景呢？
 
 1. 服务降级是指 当服务器压力剧增的情况下，根据实际业务情况及流量，对一些服务和页面有策略的不处理，或换种简单的方式处理，从而释放服务器资源以保证核心业务正常运作或高效运作。说白了，就是尽可能的把系统资源让给优先级高的服务
 2. 当整个微服务架构整体的负载超出了预设的上限阈值或即将到来的流量预计将会超过预设的阈值时，为了保证重要或基本的服务能正常运行，可以将一些 不重要 或 不紧急 的服务或任务进行服务的 延迟使用 或 暂停使用
 
-#### 11.服务熔断和降级的区别？
+### 11.服务熔断和降级的区别？
 
 1. 服务熔断—》服务端：某个服务超时或异常，引起熔断~，类似于保险丝(自我熔断)
 2. 服务降级—-》客户端：从整体网站请求负载考虑，当某个服务熔断或者关闭之后，服务将不再被调用，此时在客户端，我们可以准备一个 FallBackFactory ，返回一个默认的值(缺省值)。会导致整体的服务下降，但是好歹能用，比直接挂掉强
@@ -1654,7 +1654,7 @@ PS：因为目前面试遇到的问题基本没有springcloud方面的，所以�
 
 #### 13.Spring Cloud断路器的作用
 
-#### 14.什么是SpringCloud config分布式配置中心？它能干嘛？
+### 14.什么是SpringCloud config分布式配置中心？它能干嘛？
 
 1. spring cloud config 为微服务架构中的微服务提供集中化的外部支持，配置服务器为各个不同微服务应用的所有环节提供了一个中心化的外部配置
 2. spring cloud config 分为服务端和客户端两部分
@@ -1674,7 +1674,7 @@ PS：因为目前面试遇到的问题基本没有springcloud方面的，所以�
 
 #### 16.分布式事务如何处理，怎么保证事务的一致性？
 
-#### 17.Eureka对比和Zookeeper区别?
+### 17.Eureka对比和Zookeeper区别?
 
 1. 首先了解一下CAP原则：
 
@@ -1715,27 +1715,27 @@ PS：Eureka-》AP：
 
 ### ==82.Mybatis==
 
-#### mybatis是什么
+### mybatis是什么
 
 mybatis是一款优秀的持久层框架，可以把数据进行持久化。mybatis支持定制化SQL、存储过程，结果集映射。总的来说mybatis就是对JDBC的封装。
 
-#### 我们为什么要学习Mybatis？
+### 我们为什么要学习Mybatis？
 
 因为mybatis使用的人多，传统的jdbc代码太复杂，mybatis框架简化了流程，自动化。
 
-#### 持久化是什么？持久层是什么？
+### 持久化是什么？持久层是什么？
 
 持久化是指数据从瞬时状态转化到持久状态。内存是断电即失的，持久化是指把数据存储到数据库中，IO文件持久化等。
 持久层是完成持久化工作的代码块。
 
-#### mapper代理开发模式要求
+### mapper代理开发模式要求
 
 - 映射配置文件的命名空间必须是对应接口的全限定类名。
 - 接口中方法名称要和映射配置文件中statement对象的id一致。
 - 接口中方法的参数类型要和映射配置文件中statement对象中的parameterType类型一致。
 - 接口中方法的返回值类型要和映射配置文件中statement对象中的resultType类型一致。
 
-#### “#{}”和“${}”的区别
+### “#{}”和“${}”的区别
 
 #### 1.#{}是预编译处理。
 
@@ -1753,12 +1753,12 @@ Mybatis在处理${}时，就是把${}直接替换成变量的值。不能防止s
 - order by时，必须用 ${}。如：select * from t_user order by ${columnName}
 - 变量替换后，#{}对应的变量会自动加上单引号；变量替换后，${}对应的变量不会加上单引号（需要自己加上）。
 
-#### 什么情况下用resultMap（resultMap和resultType的区别）?
+### 什么情况下用resultMap（resultMap和resultType的区别）?
 
 当封装的对象属性（实体类）不能与查询到的字段名一一对应，需要定义自定义对象属性和查询到的字段名一一对应。
 当封装的对象属性（实体类）可以和查询到的字段名一一对应，应用resultType接收查询结果。
 
-#### 动态sql语句用到了哪些标签？
+### 动态sql语句用到了哪些标签？
 
 1. where标签,
 2. if标签(test属性),
@@ -1777,14 +1777,14 @@ Mybatis在处理${}时，就是把${}直接替换成变量的值。不能防止s
 - otherwise
 - bind
 
-#### 如何开启二级缓存？
+### 如何开启二级缓存？
 
 在核心配置文件中，配置cacheEabled的值为true(默认为true)。
 映射配置文件中的<select>标签中设置useCache=”true”代表当前statement对象使用二级缓存。
 
 
 
-#### 怎么开启延迟加载？相关属性有哪些？属性的作用？
+### 怎么开启延迟加载？相关属性有哪些？属性的作用？
 
 fetchType=”Lazy”,开启当前的延迟加载，lazyLoadingEnabled默认为false,可以设置为true开启全局延迟加载。
 select：填写我们要调用的select映射的id
@@ -1792,13 +1792,13 @@ column：填写我们要传递给select映射的参数。
 
 
 
-#### 注解配置mybatis用哪个注解？它有什么属性？封装结果集用到哪个注解？
+### 注解配置mybatis用哪个注解？它有什么属性？封装结果集用到哪个注解？
 
 [@results](https://github.com/results),属性id和value,封装结果集用到[@result
 
 
 
-#### mybatis获取插入主键值（两种方式）
+### mybatis获取插入主键值（两种方式）
 
 1. 主键支持自增长时：useGenratedKeys和keyProperty属性
 
@@ -1806,7 +1806,7 @@ column：填写我们要传递给select映射的参数。
 
    
 
-#### mybatis执行流程
+### mybatis执行流程
 
 程序执行时，通过Resources对象获取全局的配置文件，inputstream流。
 实例化SqlSessionFactoryBuilder构造器。
@@ -1825,7 +1825,7 @@ SqlSession第二种方式是直接读取方法名，执行方法。
 
 
 
-#### 相关对象的生命周期和作用域
+### 相关对象的生命周期和作用域
 
 1.SqlSessionFactoryBuider作用域。
 
@@ -1848,7 +1848,7 @@ SqlSession的实例不是线程安全的，因此是不能被共享的。
 
 
 
-#### mybatis的缓存
+### mybatis的缓存
 
 mybatis默认定义了两级缓存：一级缓存和二级缓存。
 默认情况下只有一级缓存开启（SqlSession级别的缓存）；
@@ -1880,7 +1880,7 @@ mybatis缓存的原理
 
 
 
-## mybatis如何进行分页
+### mybatis如何进行分页
 
 1.物理分页
 
@@ -1917,7 +1917,7 @@ Mybatis使用RowBounds对象进行分页，它是针对ResultSet结果集执行�
 
 
 
-#### mybatis框架使用了哪些设计模式
+### mybatis框架使用了哪些设计模式
 
 - 工厂模式
 
@@ -1939,7 +1939,7 @@ Mybatis使用RowBounds对象进行分页，它是针对ResultSet结果集执行�
 
   
 
-#### mybatis的优缺点
+### mybatis的优缺点
 
 优点
 
@@ -1957,13 +1957,13 @@ Mybatis使用RowBounds对象进行分页，它是针对ResultSet结果集执行�
 
    
 
-#### mybatis加载mappers文件有几种方式？
+### mybatis加载mappers文件有几种方式？
 
 4种方式，package、class、resource、url
 
 
 
-#### mybatis执行器有几种？默认是哪一种？
+### mybatis执行器有几种？默认是哪一种？
 
 Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple形式。
 
@@ -1979,7 +1979,7 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 
 ### ==83.Mysql==
 
-#### 1.事务的特性哪四个
+### 1.事务的特性哪四个
 
 1. 原子性：事务开启后的操作要么全部成功，要么全部失败。
 
@@ -1991,7 +1991,7 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 
    
 
-#### 2.并发事务下可能产生哪些问题
+### 2.并发事务下可能产生哪些问题
 
 1. 脏读：一个事务读取到另一个事务未提交的数据。
 
@@ -2001,7 +2001,7 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 
    
 
-#### 3.事务的隔离级别
+### 3.事务的隔离级别
 
 1. none：无事务级别
 2. read_commited：读已提交。禁止脏读
@@ -2013,14 +2013,14 @@ Executor是mybatis执行器的顶级接口，有3种执行器，默认是simple�
 
 
 
-#### 4.MySQL使用的是哪个隔离级别
+### 4.MySQL使用的是哪个隔离级别
 
 mysql默认的事务隔离级别为repeatable-read
 Oracle支持的隔离级别：read committed/serializable；默认的是read committed
 
 
 
-#### 5.MySQL怎么解决幻读的问题
+### 5.MySQL怎么解决幻读的问题
 
 > SELECT查询分为快照读和实时读
 >
@@ -2061,7 +2061,7 @@ Next-Key Lock会确定一段范围，然后对这个范围加锁，保证A在whe
 
 
 
-#### 4.事务的七种传播行为
+### 4.事务的七种传播行为
 
 A方法调用B方法：A是当前，B是自己
 
@@ -2081,7 +2081,7 @@ A方法调用B方法：A是当前，B是自己
 
    
 
-#### 5.数据库的三大范式
+### 5.数据库的三大范式
 
 1. 保证每列的原子性。比如地址需要拆分为省、市、区列，不能只有地址列。
 
@@ -2091,20 +2091,20 @@ A方法调用B方法：A是当前，B是自己
 
    
 
-#### 6.MySQL有哪些数据类型
+### 6.MySQL有哪些数据类型
 
 常用的有：int、bigint、varchar、datatime
 还有一些其他的：tinyint、smallint、mediumint、char、tinytext、text、date、time、year、timestamp、null
 
 
 
-#### 7.InnoDB与MyISAM的区别
+### 7.InnoDB与MyISAM的区别
 
 ![img](..\..\notes\img\offer\kuangstudy83e926e0-a1b1-4209-b734-f8652beb0db9.jpg)
 
 
 
-#### 8.SQL优化的几种方式
+### 8.SQL优化的几种方式
 
 1. 表中建立索引，优先考虑在where、group by使用到的字段。
 
@@ -2131,7 +2131,7 @@ A方法调用B方法：A是当前，B是自己
 
     
 
-#### mysql锁的类型
+### mysql锁的类型
 
 - 基于锁的属性分类：共享锁、排他锁。
 - 基于锁的粒度分类：行级锁（INNODB）、表级锁（INNODB、MYISAM）、页级锁（BDB引擎）、记录锁、间隙锁、临键锁
@@ -2155,7 +2155,7 @@ A方法调用B方法：A是当前，B是自己
 
    
 
-#### 意向锁概念
+### 意向锁概念
 
 如果事务A加锁成功之后就设置一个状态告诉后面的人，已经有人对表里的行加了一个排他锁了，你们不能对整个表加共享锁或排它锁了，那么后面需要对整个表加锁的人只需要获取这个状态就知道自己是不是可以对表加锁，避免了对整个索引树的每个节点扫描是否加锁，而这个状态就是意向锁。
 
@@ -2165,7 +2165,7 @@ A方法调用B方法：A是当前，B是自己
 
    
 
-#### 左连接、右连接、全连接，他们有什么区别？
+### 左连接、右连接、全连接，他们有什么区别？
 
     CREATE TABLE `a_table` (
       `a_id` int(11) DEFAULT NULL,
@@ -2256,13 +2256,13 @@ select tbl1.col1, tbl2.col2 from tbl1 left outer join tbl2 using(col3) where tbl
 
 ### ==84.Spring==
 
-#### 1.spring是什么
+### 1.spring是什么
 
 spring是一个开源的、轻量级的、非侵入式的、控制反转和面向切面的容器框架。
 
 
 
-#### 2.spring的目的
+### 2.spring的目的
 
 - 为了解决企业级应用开发的复杂性。
 
@@ -2270,7 +2270,7 @@ spring是一个开源的、轻量级的、非侵入式的、控制反转和面�
 
   
 
-#### 3.谈谈你对IOC的理解
+### 3.谈谈你对IOC的理解
 
 IOC（控制反转）是一种编程思想，由主动的编程变成被动的接收。
 控制：由谁来控制对象的创建，传统的应用是由程序本身来控制对象的的创建，使用了spring，由spring来创建对象。
@@ -2293,7 +2293,7 @@ p命名空间注入（本质set方法注入，需要有set方法）
 
 
 
-#### IOC他的底层是怎么实现的？
+### IOC他的底层是怎么实现的？
 
 什么是 IOC
 
@@ -2346,7 +2346,7 @@ IOC模式:
 
 
 
-#### 4.IOC创建对象的方式
+### 4.IOC创建对象的方式
 
 - 通过无参构造创建对象
 
@@ -2354,7 +2354,7 @@ IOC模式:
 
   
 
-#### 5.依赖注入的四种方式
+### 5.依赖注入的四种方式
 
 - 构造器注入
 
@@ -2366,7 +2366,7 @@ IOC模式:
 
   
 
-#### 6.bean的作用域
+### 6.bean的作用域
 
 bean的默认作用域是单例模式singleton
 
@@ -2382,7 +2382,7 @@ bean的默认作用域是单例模式singleton
 
   
 
-#### 7.bean的自动装配
+### 7.bean的自动装配
 
 1. 在xml配置文件中，以上的四种依赖注入方式配置属性。
 
@@ -2399,7 +2399,7 @@ bean的默认作用域是单例模式singleton
 
     
 
-#### 8.谈谈你对AOP的理解
+### 8.谈谈你对AOP的理解
 
 面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。
 AOP是OOP的延续，利用AOP可以将程序中的公共业务逻辑（比如安全管理，日志，事务管理，缓存等）封装成一个切面，然后注入到目标对象（主要业务逻辑）中去，可以减少系统的重复代码和降低模块之间的耦合度，提高程序可重用性，同时提高开发的效率。（切面就是那些与主要业务无关，但所有主要业务模块都会调用的公共业务逻辑。）
@@ -2407,7 +2407,7 @@ AOP可以对某个对象或某些对象的功能进行增强，比如对象中�
 
 
 
-#### 9.AOP的名词解释
+### 9.AOP的名词解释
 
 - 横切关注点：跨越应用程序多个模块的方法或功能。（与我们业务逻辑无关，但需要我们关注的部分就是横切关注点。例如：日志、缓存、安全、事务等等）
 
@@ -2425,7 +2425,7 @@ AOP可以对某个对象或某些对象的功能进行增强，比如对象中�
 
   
 
-#### 10.spring有哪些通知类型
+### 10.spring有哪些通知类型
 
 - 前置通知：在目标方法执行之前执行
 - 后置通知：在目标方法执行之后执行（目标方法抛出异常则不执行）
@@ -2438,7 +2438,7 @@ AOP可以对某个对象或某些对象的功能进行增强，比如对象中�
 
 
 
-#### 11.五种通知执行的顺序
+### 11.五种通知执行的顺序
 
 1.在目标方法没有抛出异常的情况下
 
@@ -2466,14 +2466,14 @@ AOP可以对某个对象或某些对象的功能进行增强，比如对象中�
 
 
 
-#### 12.讲一讲spring事务的原理
+### 12.讲一讲spring事务的原理
 
 spring事务的本质是数据库对事务的支持，使用spring的事务管理时，在执行增删改查之前之后，spring可以自动完成开启事务和关闭事务的操作。
 配置文件开启注解驱动，在类或方法上加上[@Transactional](https://github.com/Transactional)注解，spring启动时会解析相关bean，查看bean拥有[@Transactional](https://github.com/Transactional)注解的类和方法，并为这些类和方法生成代理，并且根据[@Transactional](https://github.com/Transactional)的相关参数进行配置注入，这样在代理中完成事务的处理。
 
 
 
-#### spring事务什么时候会失效
+### spring事务什么时候会失效
 
 1. 发生自调用，类里面使用this调用本类的方法，此时这个this对象不是代理类，而是UserService对象本身，应该使用注入的userService调用。
 
@@ -2487,7 +2487,7 @@ spring事务的本质是数据库对事务的支持，使用spring的事务管�
 
    
 
-#### 13.spring如何解决循环依赖的问题
+### 13.spring如何解决循环依赖的问题
 
 解答来自：https://www.bilibili.com/video/BV1Ga4y1E7Br?from=search&seid=13790499314022312558&spm_id_from=333.337.0.0
 首先spring的bean是由BeanDefinition建模类来的，spring的bean有一系列复杂的生命周期，spring容器启动会去扫描bean，扫描完之后会把bean变成一个BeanDefinition存到一个BeanDefinitionMap中，然后对这个BeanDefinitionMap进行遍历，遍历完做一些验证，比如是否单例、是否原型、是否懒加载、是否factoryBean等等，验证完后，然后获取当前的类是否在单例池当中，如果没有，再去看一下有没有在二级缓存当中，如果没有，那么spring就开始创建这个bean：第一步推断这个bean的最佳构造方法，然后通过反射实例化这个对象，然后根据这个对象对这个bean做一些初始化工作…
@@ -2512,7 +2512,7 @@ spring的循环依赖只支持单例，为什么只支持单例？
 
 
 
-#### BeanFactory和ApplicationContext有什么区别？
+### BeanFactory和ApplicationContext有什么区别？
 
 ApplicationContext是BeanFactory的子接口；
 ApplicationContext提供了更完整的功能：
@@ -2529,7 +2529,7 @@ ApplicationContext提供了更完整的功能：
   
   
 
-#### Spring框架中的单例Bean线程安全吗？
+### Spring框架中的单例Bean线程安全吗？
 
 不是线程安全的，不要在bean中声明任何有状态的实例变量或类变量。
 如果一定要定义变量，就需要使用ThreadLocal把变量变为线程私有的；
@@ -2537,7 +2537,7 @@ ApplicationContext提供了更完整的功能：
 
 
 
-#### Spring框架中用到了哪些设计模式？
+### Spring框架中用到了哪些设计模式？
 
 工厂模式：Spring中的BeanFactory创建对象的实例就是工厂模式的体现，根据传入一个唯一的标识来获得Bean对象。
 单例模式：spring创建对象的时候默认采用的都是单例模式。
@@ -2550,7 +2550,7 @@ ApplicationContext提供了更完整的功能：
 
 
 
-#### spring和springboot的关系是什么？
+### spring和springboot的关系是什么？
 
 SpringBoot是为了让大家更容易使用spring，更容易集成各种常用的中间件、开源软件。
 SpringBoot基于Spring开发, SpringBoot本身并不提供Spring框架的核心特性以及扩展功能，只是用于快速、敏捷地开发新一代基于Spring框架的应用程序。
@@ -2566,7 +2566,7 @@ SpringBoot不是用来替代spring的解决方案，而是和spring框架紧密�
 
 ### ==85.SpringMVC==
 
-#### 1.springmvc执行过程
+### 1.springmvc执行过程
 
 1. 用户发送请求，前端控制器（DispatcherServlet）接收请求并拦截请求。
 
@@ -2594,14 +2594,14 @@ SpringBoot不是用来替代spring的解决方案，而是和spring框架紧密�
 
     
 
-#### 2.什么是springMVC?简单介绍下你对springMVC的理解
+### 2.什么是springMVC?简单介绍下你对springMVC的理解
 
 SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻量级Web框架。
 通过MVC模式把业务逻辑、视图、数据分离开来组织代码，降低视图和业务逻辑的耦合性，简化了开发，使流程更清晰。
 
 
 
-#### 3.springMVC的优点
+### 3.springMVC的优点
 
 1. 可以支持各种视图技术；jsp，thymeleaf…
 
@@ -2611,7 +2611,7 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
    
 
-#### 4.springMVC常用的注解
+### 4.springMVC常用的注解
 
 @RequestMapping：用于处理请求url映射的注解，可用于类或方法上。
 @RequestBody：实现接收http请求的json数据，把json转换为java对象。
@@ -2623,7 +2623,7 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
 
 
-#### 5.SpringMVC怎么设定重定向和转发的
+### 5.SpringMVC怎么设定重定向和转发的
 
 - 转发：在返回值前面加上forward；比如forward:/hello.jsp
 
@@ -2631,7 +2631,7 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
   
 
-#### 6.springMVC和struts2的区别有哪些？
+### 6.springMVC和struts2的区别有哪些？
 
 1. springmvc的入口是一个servlet即前端控制器（DispatchServlet）；
     struts2入口是一个filter过虑器（StrutsPrepareAndExecuteFilter）。
@@ -2644,19 +2644,19 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
     
 
-#### 7.如何解决POST请求中文乱码问题?
+### 7.如何解决POST请求中文乱码问题?
 
 在web.xml中配置一个CharacterEncodingFilter过滤器，设置成utf-8
 
 
 
-#### 8.GET请求乱码怎么解决
+### 8.GET请求乱码怎么解决
 
 1. 修改tomcat配置文件添加编码与工程编码一致.
 2. 对参数进行重新编码；ISO8859-1是tomcat默认编码，需要将tomcat编码后的内容按utf-8编码。
 3. 
 
-#### 9.springMVC里面拦截器是怎么写？
+### 9.springMVC里面拦截器是怎么写？
 
 1. 自定义类实现HandlerInterceptor接口，重写preHandle方法（处理前）、postHandle方法（处理后）、afterCompletion方法（清理操作）。
 2. 继承适配器类，在接口方法中实现处理逻辑，最后在SpringMVC配置文件中配置拦截器。
@@ -2665,13 +2665,13 @@ SpringMVC是一个基于Java实现了MVC设计模式的请求驱动类型的轻�
 
 
 
-#### SpringMvc的控制器是不是单例模式，如果是，有什么问题，怎么解决？
+### SpringMvc的控制器是不是单例模式，如果是，有什么问题，怎么解决？
 
 单例模式，解决方法是在控制器中不写变量，如果必须要写，需要自己进行同步问题的解决。
 
 
 
-#### 拦截器和过滤器的区别
+### 拦截器和过滤器的区别
 
 https://www.kuangstudy.com/bbs/1377253872002789377#header18
 
@@ -2690,7 +2690,7 @@ https://www.kuangstudy.com/bbs/1377253872002789377#header18
 
 
 
-#### 10.SpringMvc和SpringBoot的区别
+### 10.SpringMvc和SpringBoot的区别
 
 > - Spring 最初利用“工厂模式”（DI）和“代理模式”（AOP）解耦应用组件。
 > - 大家觉得挺好用，于是按照这种模式搞了一个 MVC框架（一些用Spring 解耦的组件），用开发 web 应用（ SpringMVC ）。
@@ -2728,7 +2728,7 @@ https://www.kuangstudy.com/bbs/1377253872002789377#header18
 
 ### ==86.Redis==
 
-#### 1.什么是redis？redis用来做什么
+### 1.什么是redis？redis用来做什么
 
 Redis（Remote Dictionary Server )，即远程字典服务。
 是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。
@@ -2737,7 +2737,7 @@ redis支持事务、持久化、集群、多样的数据类型。
 
 
 
-#### 2.redis的基本数据类型
+### 2.redis的基本数据类型
 
 string字符串
 list列表
@@ -2751,7 +2751,7 @@ bitmap：位存储，可以用来统计用户信息；登录，不登录；活�
 
 
 
-#### 3.redis为什么那么快
+### 3.redis为什么那么快
 
 redis是基于内存的数据库，相对于基于磁盘的MySQL数据库，省去了IO读写磁盘的消耗。
 redis是单线程的，避免了多线程CPU的上下文切换和竞争锁的阻塞，这些都是耗时的操作。
@@ -2761,7 +2761,7 @@ redis构建了VM的机制，不会去直接调用系统函数处理，需要一�
 
 
 
-#### 4.redis常用的应用场景
+### 4.redis常用的应用场景
 
 缓存
 排行榜
@@ -2774,7 +2774,7 @@ redis构建了VM的机制，不会去直接调用系统函数处理，需要一�
 
 
 
-#### 5.redis持久化有哪些，说一说优缺点
+### 5.redis持久化有哪些，说一说优缺点
 
 rdb
 
@@ -2798,7 +2798,7 @@ aof默认文件重写文件大小是64M，建议设置5G，默认超过原大小
 
 
 
-#### 6.怎么实现Redis的高可用？
+### 6.怎么实现Redis的高可用？
 
 主从复制，读写分离。多台redis服务器，以一主二从为例，主服务器进行写操作并把数据同步给两台从服务器，从服务器负责处理读的操作。
 在主从复制之上，可以用上哨兵模式，以及部署多个集群。
@@ -2812,21 +2812,21 @@ Redis提供了哨兵的命令，哨兵是一个独立的进程。其原理是哨
 
 
 
-#### 7.使用过Redis分布式锁吗？有哪些注意点呢？
+### 7.使用过Redis分布式锁吗？有哪些注意点呢？
 
 分布式锁，是控制分布式系统不同进程共同访问共享资源的一种锁的实现。
 秒杀下单、抢红包等等业务场景，都需要用到分布式锁。
 
 
 
-#### 8.MySQL与Redis 如何保证双写一致性
+### 8.MySQL与Redis 如何保证双写一致性
 
 1. 缓存延时双删
 2. “删除缓存重试机制”
 3. 读取biglog异步删除缓存。
 4. 
 
-#### 9.redis的事务
+### 9.redis的事务
 
 Redis事务本质是一组命令的集合，一个事务中的所有命令都会被序列化，在事务执行过程的中，会按照顺序执行。一次性、顺序性、排他性的执行一系列命令。
 Redis事务没有隔离级别的概念；所有的命令在事务中，并没有直接被执行，只有发起执行命令的时候才会执行。Exec
@@ -2839,7 +2839,7 @@ redis事务执行过程：
 
 
 
-#### 10.redis如何实现乐观锁
+### 10.redis如何实现乐观锁
 
 乐观锁是无论做什么都很乐观，不会上锁，更新数据时会比较一下数据，在此期间是否有人更改数据。
 获取version，更新的时候比较version。
@@ -2849,7 +2849,7 @@ redis事务执行过程：
 
 
 
-#### 11.redis的缓存穿透和雪崩
+### 11.redis的缓存穿透和雪崩
 
 1.缓存穿透
 
@@ -2881,7 +2881,7 @@ redis事务执行过程：
 
 
 
-#### redis过期键的删除策略
+### redis过期键的删除策略
 
 可以设置redis中缓存key的过期时间。
 删除策略：指的是redis中缓存key过期了，redis如何处理？
@@ -3021,7 +3021,7 @@ incrby myLock
 
 ### ==87.Springboot==
 
-#### 1.springboot常用的注解有哪些？
+### 1.springboot常用的注解有哪些？
 
 1. [@springbootApplication](https://github.com/springbootApplication):这个注解是Spring Boot最核心的注解，用在 Spring Boot的主类上，标识这是一个 Spring Boot 应用，用来开启 Spring Boot 的各项能力。实际上这个注解是[@Configuration](https://github.com/Configuration),[@EnableAutoConfiguration](https://github.com/EnableAutoConfiguration),[@ComponentScan](https://github.com/ComponentScan)三个注解的组合
 
@@ -3061,7 +3061,7 @@ incrby myLock
 
     
 
-#### 2.@ Component和@ bean有什么区别？
+### 2.@ Component和@ bean有什么区别？
 
 1. [@Component](https://github.com/Component)一般作用于类上，[@bean](https://github.com/bean)作用于方法上
 
@@ -3071,7 +3071,7 @@ incrby myLock
 
    
 
-#### 3.springboot相对spring来说有什么优点？======被问+1
+### 3.springboot相对spring来说有什么优点？======被问+1
 
 1. 全部采用注解方式，没有繁琐的xml配置
 
@@ -3081,7 +3081,7 @@ incrby myLock
 
    
 
-#### 4.Spring Boot 自动配置原理是什么?======被问+2
+### 4.Spring Boot 自动配置原理是什么?======被问+2
 
 1. 首先我们可以看到，springboot的启动类上有一个[@SpringBootApplication](https://github.com/SpringBootApplication)注解。这个注解是一个复合注解或派生注解，它里面有一个注解[@EnableAutoConfiguration](https://github.com/EnableAutoConfiguration)，通俗的讲就是一个开启自动配置的注解。
 2. 这个注解也是一个派生注解，其中的关键功能由[@Import](https://github.com/Import)提供，它导入的AutoConfigurationImportSelector类的selectImports()方法通过SpringFactoriesLoader.loadFactoryNames()扫描所有具有META-INF/spring.factories的jar包，它里面会有一个spring.factories的文件。
@@ -3157,7 +3157,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
 
 
-#### 5.什么是 YAML？YAML 配置的优势在哪里 ?
+### 5.什么是 YAML？YAML 配置的优势在哪里 ?
 
 1. YAML 是一种人类可读的数据序列化语言。它通常用于配置文件。与属性文件相比，如果我们想要在配置文件中添加复杂的属性，YAML 文件就更加结构化，而且更少混淆。可以看出 YAML 具有分层配置数据
 2. 优势：
@@ -3170,7 +3170,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
   
 
-#### 6.Spring Boot 中如何实现定时任务 ?
+### 6.Spring Boot 中如何实现定时任务 ?
 
 1. 首先在启动类上加上注解 [@EnableScheduling](https://github.com/EnableScheduling)
 
@@ -3178,7 +3178,7 @@ SpringBoot自动配置的原理理解起来挺简单的，我们在使用SpringB
 
    
 
-#### 7.Springboot有几个配置文件
+### 7.Springboot有几个配置文件
 
 ###### **一、springboot主要配置文件种类**
 
@@ -3242,7 +3242,7 @@ Spring Boot 虽然上手很容易，但如果你不了解其核心技术及流�
 
 
 
-##### 3、SpringBoot、Spring MVC和Spring有什么区别？
+### 3、SpringBoot、Spring MVC和Spring有什么区别？
 
 **Spring**
 
@@ -3262,7 +3262,7 @@ SpringBoot通过一个自动配置和启动的项来解决这个问题。
 
 
 
-##### 4、什么是Spring Boot Starter？
+### 4、什么是Spring Boot Starter？
 
 启动器是一套方便的依赖描述符，它可以放在自己的程序中。可以一站式的获取你所需要的Spring和相关技术，而不需要依赖描述符的通过示例代码搜索和复制粘贴的负载。
 
@@ -3270,7 +3270,7 @@ SpringBoot通过一个自动配置和启动的项来解决这个问题。
 
 
 
-##### 5、为什么需要spring-boot-maven-plugin？
+### 5、为什么需要spring-boot-maven-plugin？
 
 spring-boot-maven-plugin提供了一些像jar一样打包或者运行应用程序的命令。
 
@@ -3284,20 +3284,20 @@ spring-boot-maven-plugin提供了一些像jar一样打包或者运行应用程�
 >
 >    
 
-##### 6、什么是YAML？
+### 6、什么是YAML？
 
 YAML是一种人类可读的数据序列化语言。它通常用于配置文件。
 与属性文件相比，如果我们想要在配置文件中添加复杂的属性，YAML文件就更加结构化，而且更少混淆。可以看出YAML具有分层配置数据。
 
 
 
-##### 7、SpringBoot自动配置的原理
+### 7、SpringBoot自动配置的原理
 
 在Spring程序main方法中，添加[@SpringBootApplication](https://github.com/SpringBootApplication)或者[@EnableAutoConfiguration](https://github.com/EnableAutoConfiguration)会自动去maven中读取每个starter中的spring.gfactories文件，改文件里配置了所有需要被创建的Spring容器中的bean
 
 
 
-##### 8、RequestMapping和GetMapping的不同之处在哪里？
+### 8、RequestMapping和GetMapping的不同之处在哪里？
 
 RequestMapping具有类属性的，可以进行GET、POST、PUT或者其他的注释中具有的请求方法。
 
@@ -3323,7 +3323,7 @@ GetMapping是Get请求方法中的一个特例，它只是RequestMapping的一�
 
   
 
-##### 10、SpringBoot 打成jar和普通的jar有什么区别？
+### 10、SpringBoot 打成jar和普通的jar有什么区别？
 
 Spring Boot 项目最终打包成的 jar 是可执行 jar ，这种 jar 可以直接通过`java -jar xxx.jar`命令来运行，这种 jar 不可以作为普通的 jar 被其他项目依赖，即使依赖了也无法使用其中的类。
 
@@ -3331,7 +3331,7 @@ Spring Boot 的 jar 无法被其他项目依赖，主要还是他和普通 jar �
 
 
 
-##### 11、运行SpringBoot有几种方式？
+### 11、运行SpringBoot有几种方式？
 
 - 打包用命令或者放到容器中运行
 
@@ -3341,7 +3341,7 @@ Spring Boot 的 jar 无法被其他项目依赖，主要还是他和普通 jar �
 
   
 
-##### 12、开启Spring Boot特性有哪几种方式？
+### 12、开启Spring Boot特性有哪几种方式？
 
 - 继承spring-boot-starter-parent项目
 
@@ -3349,7 +3349,7 @@ Spring Boot 的 jar 无法被其他项目依赖，主要还是他和普通 jar �
 
   
 
-##### 13、什么是Spring Data？
+### 13、什么是Spring Data？
 
 Spring Data 是 Spring 的一个子项目。用于简化数据库访问，支持NoSQL 和 关系数据存储。其主要目标是使数据库的访问变得方便快捷。Spring Data 具有如下特点：
 
@@ -3369,19 +3369,19 @@ Spring Data Jpa **致力于减少数据访问层 (DAO) 的开发量**. 开发者
 
 
 
-##### 14、什么是Swagger？你用Spring Boot实现了吗？
+### 14、什么是Swagger？你用Spring Boot实现了吗？
 
 Swagger 广泛用于可视化 API，使用 Swagger UI 为前端开发人员提供在线沙箱。Swagger 是用于生成 RESTful Web  服务的可视化表示的工具，规范和完整框架实现。它使文档能够以与服务器相同的速度更新。当通过 Swagger  正确定义时，消费者可以使用最少量的实现逻辑来理解远程服务并与其进行交互。因此，Swagger消除了调用服务时的猜测。
 
 
 
-##### 15、前后端分离，如何维护接口文档？
+### 15、前后端分离，如何维护接口文档？
 
 前后端分离开发日益流行，大部分情况下，我们都是通过 Spring Boot 做前后端分离开发，前后端分离一定会有接口文档，不然会前后端会深深陷入到扯皮中。一个比较笨的方法就是使用 word 或者 md 来维护接口文档，但是效率太低，接口一变，所有人手上的文档都得变。在 Spring Boot 中，这个问题常见的解决方案是 Swagger ，使用 Swagger  我们可以快速生成一个接口文档网站，接口一旦发生变化，文档就会自动更新，所有开发工程师访问这一个在线网站就可以获取到最新的接口文档，非常方便。
 
 
 
-##### 16、如何使用Spring Boot实现异常处理？
+### 16、如何使用Spring Boot实现异常处理？
 
 Spring提供了一种使用ControllerAdvice处理异常的非常有用的方法。通过实现一个ControlerAdvice类，来处理控制类抛出的所有异常。
 
@@ -3389,13 +3389,13 @@ Spring提供了一种使用ControllerAdvice处理异常的非常有用的方法�
 
 
 
-##### 17、什么是FreeMarker模板？
+### 17、什么是FreeMarker模板？
 
 FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软件架构进行动态网页生成。使用 Freemarker  的主要优点是表示层和业务层的完全分离。程序员可以处理应用程序代码，而设计人员可以处理 html 页面设计。最后使用freemarker  可以将这些结合起来，给出最终的输出页面。
 
 
 
-##### 18、如何实现Spring Boot应用程序的安全性？
+### 18、如何实现Spring Boot应用程序的安全性？
 
 为了实现Spring Boot的安全性，使用spring-boot-starter-security依赖项，并且必须添加安全配置。它只需要很少代码。配置类将必须扩展WebSecurityConfigurerAdapter并覆盖其方法。
 
@@ -3413,7 +3413,7 @@ FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软�
 
   
 
-##### 20、Spring Boot中如何解决跨域问题？
+### 20、Spring Boot中如何解决跨域问题？
 
 跨域可以在前端通过JSONP来解决，但是JSONP只可以发送GET请求，无法发送其他类型的请求，在RESTful风格的应用中，就显得非常鸡肋，因此推荐在后端通过（CORS，Cross-origin resource sharing）来解决跨域问题。这种解决方案并非Spring  Boot特有的，在传统的SSM框架中，就可以通过CORS来解决跨域问题，只不过之前我们是在XML文件中配置CORS，现在可以通过实现WebMvcConfigurer接口然后重写addCorsMappings方法解决跨域问题。
 
@@ -3432,13 +3432,13 @@ FreeMarker 是一个基于 Java 的模板引擎，最初专注于使用 MVC 软�
 
 
 
-##### 21、什么是CSRF攻击？
+### 21、什么是CSRF攻击？
 
 CSRF 代表跨站请求伪造。这是一种攻击，迫使最终用户在当前通过身份验证的Web 应用程序上执行不需要的操作。CSRF 攻击专门针对状态改变请求，而不是数据窃取，因为攻击者无法查看对伪造请求的响应。
 
 
 
-##### 22、Spring Boot的核心注解是哪些？他主由哪几个注解组成的？
+### 22、Spring Boot的核心注解是哪些？他主由哪几个注解组成的？
 
 启动类上面的注解是[@SpringBootApplication](https://github.com/SpringBootApplication)，他也是SpringBoot的核心注解，主要组合包含了以下3个注解：
 
@@ -3450,7 +3450,7 @@ CSRF 代表跨站请求伪造。这是一种攻击，迫使最终用户在当前
 
   
 
-##### 23、SpringBoot的核心配置文件有哪几个？他们的区别是什么？
+### 23、SpringBoot的核心配置文件有哪几个？他们的区别是什么？
 
 SpringBoot的核心配置文件是`application和bootstrap`配置文件。
 
@@ -3466,19 +3466,19 @@ bootstrap配置文件有以下几个应用场景：
 
   
 
-##### 24、SpringBoot有哪几种读取配置的方式？
+### 24、SpringBoot有哪几种读取配置的方式？
 
 Spring Boot 可 以 通 过 **[@PropertySource](https://github.com/PropertySource),[@Value](https://github.com/Value),[@Environment](https://github.com/Environment), [@ConfigurationProperties](https://github.com/ConfigurationProperties)** 来绑定变量。
 
 
 
-##### 25、Spring Boot 支持哪些日志框架？推荐和默认的日志框架是哪个？
+### 25、Spring Boot 支持哪些日志框架？推荐和默认的日志框架是哪个？
 
 Spring Boot 支持 Java Util Logging, Log4j2, Lockback 作为日志框架，如果你使用Starters 启动器，Spring Boot 将使用 Logback 作为默认日志框架。
 
 
 
-##### 26、保护SpringBoot应用有哪些方法？
+### 26、保护SpringBoot应用有哪些方法？
 
 - 在生产中使用HTTPS
 
@@ -3492,7 +3492,7 @@ Spring Boot 支持 Java Util Logging, Log4j2, Lockback 作为日志框架，如�
 
   
 
-##### 27、SpringBoot 2.X有哪些新特性？与1.X有什么区别？
+### 27、SpringBoot 2.X有哪些新特性？与1.X有什么区别？
 
 > - 配置变更
 >
@@ -3510,7 +3510,7 @@ Spring Boot 支持 Java Util Logging, Log4j2, Lockback 作为日志框架，如�
 >
 >   
 
-#### 88.jsp与servlet之间关系
+### 88.jsp与servlet之间关系
 
 JSP是Servlet技术的扩展，本质上就是Servlet的简易方式。JSP编译后是“类servlet”。
 Servlet和JSP最主要的不同点在于：
@@ -3521,7 +3521,7 @@ Servlet更多的是类似于一个Controller，用来做控制。
 
 
 
-#### 89.servlet生命周期
+### 89.servlet生命周期
 
 实例化：servlet容器创建servlet对象。默认创建servlet实例的时机：当我们发送servlet对应的请求时(在使用时创建)。类似单例模式中的懒加载方式。希望容器一旦启动，就自动创建servlet实例通过load-on-startup=1设置，正数数值越低优先级别越高，优先实例化
 
@@ -3533,13 +3533,13 @@ Servlet更多的是类似于一个Controller，用来做控制。
 
 
 
-#### 90.什么是jdbc
+### 90.什么是jdbc
 
 Java DataBase Connectivity:(java数据库连接)是一种可以执行SQL语句的Java API,可以为多种数据库提供统一访问,是java语言编写的类和接口的组成.jdbc提供了一种基准,据此可以构建更高级的工具和接口,使开发人员能够编写数据库应用程序
 
 
 
-#### 91.jvm和tomcat参数设置
+### 91.jvm和tomcat参数设置
 
 Xms是设置[内存](https://so.csdn.net/so/search?q=内存&spm=1001.2101.3001.7020)初始化的大小
 
